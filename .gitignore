@@ -28,3 +28,5 @@ coverage
 *.sw?
 
 vite.config.js
+/package-lock.json
+/config.js

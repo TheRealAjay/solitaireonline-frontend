@@ -1,19 +1,45 @@
 <script setup>
 
-import axios from 'axios';
-import config from '../../../vite.config'
+import {ref} from 'vue';
+import config from "../../../config";
 
- const onSubmit = async (e) => {
+const errorMessage = ref(null);
+
+const onSubmit = async (e) => {
 	let values = [];
 	for (const eElement of e.target.elements) {
-		if (eElement.name){
+		if (eElement.name) {
 			values[eElement.name] = eElement.value;
 		}
 	}
 
-	let response = await axios({
-		// url: config.api.url,
-	})
+	const requestOptions = {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+		},
+		body: JSON.stringify({
+			username: values['username'],
+			password: values['password']
+		})
+	};
+	fetch(config.api.url + 'login', requestOptions)
+		.then(async response => {
+			const isJson = response.headers.get('content-type')?.includes('application/json');
+			const data = isJson && await response.json();
+
+			// check for error response
+			if (!response.ok) {
+				// get error message from body or default to response status
+				const error = (data && data.message) || response.status;
+				return Promise.reject(error);
+			}
+		})
+		.catch(error => {
+			errorMessage.value = error;
+			console.error("There was an error!", error);
+		});
 }
 </script>
 
