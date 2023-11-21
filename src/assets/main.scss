@@ -10,6 +10,29 @@
   font-family  : Lato, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
+@mixin button($bg:#00bd7e, $hoverBg: #00704a, $color: #ebebeb, $hoverColor: #ebebeb) {
+  min-width          : 150px;
+  padding            : 15px 25px 15px 25px;
+  background-color   : $bg;
+  color              : $color;
+  border             : none;
+  border-radius      : 10px;
+  appearance         : none;
+  -moz-appearance    : none;
+  -webkit-appearance : none;
+  transition         : all .333s ease;
+
+  &:hover {
+	background-color : $hoverBg;
+	color            : $hoverColor;
+	transition       : all .333s ease;
+	cursor           : pointer;
+	box-shadow         : 5px 5px 15px -5px rgba($hoverBg, 0.75);
+	-webkit-box-shadow : 5px 5px 15px -5px rgba($hoverBg, 0.75);
+	-moz-box-shadow    : 5px 5px 15px -5px rgba($hoverBg, 0.75);
+  }
+}
+
 a, .green {
   text-decoration : none;
   color           : hsla(160, 100%, 37%, 1);
@@ -71,11 +94,31 @@ a, .green {
   }
 
   &__form {
-	margin-top      : 50px;
 	width           : 100%;
 	display         : flex;
+	flex-direction  : column;
 	justify-content : center;
 	align-items     : center;
-	flex-direction  : column;
+
+	&__input {
+	  margin-bottom    : 25px;
+	  padding-bottom   : 2px;
+	  @include font(left, #1c1b22, normal, normal, 400, 14px);
+	  width            : 100%;
+	  border           : none;
+	  background-color : transparent;
+	  border-bottom    : 1px solid #1c1b22;
+	  outline          : none;
+	  box-shadow       : none;
+	}
+
+	&__submit {
+	  @include font(center, #ebebeb, normal, normal, 400, 14px);
+	  @include button();
+	}
+
+	&__container {
+	  margin-top : 50px;
+	}
   }
 }

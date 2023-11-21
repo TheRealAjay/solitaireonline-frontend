@@ -11,13 +11,13 @@ import RegisterForm from "@/components/LoginBoxComponents/RegisterForm.vue";
 		</div>
 		<div class="login__box__title">
 			<div class="login__box__title__top">
-				Solitaire Online
+				Solitaire Meister
 			</div>
 			<div class="login__box__title__bottom">
 				{{ title }}
 			</div>
 		</div>
-		<div class="login__box__form">
+		<div class="login__box__form__container">
 			<LoginForm v-if="componentType==='login'" />
 			<RegisterForm v-if="componentType==='register'" />
 		</div>
