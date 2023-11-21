@@ -6,7 +6,7 @@ import LoginBox from "@/components/LoginBox.vue";
 <template>
 	<div class="main">
 		<Navigator />
-		<LoginBox :title="'Login'" />
+		<LoginBox :title="'Login'" :component-type="'login'" />
 	</div>
 </template>
 

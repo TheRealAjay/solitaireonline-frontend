@@ -1,5 +1,7 @@
 <script setup>
-import logo from "../assets/logo@2x.png"
+import logo from "../assets/logo@2x.png";
+import LoginForm from "@/components/LoginBoxComponents/LoginForm.vue";
+import RegisterForm from "@/components/LoginBoxComponents/RegisterForm.vue";
 </script>
 
 <template>
@@ -15,17 +17,25 @@ import logo from "../assets/logo@2x.png"
 				{{ title }}
 			</div>
 		</div>
+		<div class="login__box__form">
+			<LoginForm v-if="componentType==='login'" />
+			<RegisterForm v-if="componentType==='register'" />
+		</div>
 	</div>
 </template>
 
 <script>
+
 export default {
 	name: "LoginBox",
 	props: {
 		title: {
 			type: String,
-			required: true,
 			default: "Login"
+		},
+		componentType: {
+			type: String,
+			default: "login"
 		}
 	}
 }
