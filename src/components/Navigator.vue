@@ -1,7 +1,7 @@
 <template>
 	<nav>
 		<RouterLink to="/">Login</RouterLink>
-		<RouterLink to="/register">Registrierung</RouterLink>
+		<RouterLink to="/registrierung">Registrierung</RouterLink>
 	</nav>
 </template>
 
@@ -13,10 +13,11 @@ export default {
 
 <style scoped>
 nav {
-	width      : 100%;
-	font-size  : 12px;
-	text-align : center;
-	margin-top : 0;
+	width         : 100%;
+	font-size     : 12px;
+	text-align    : center;
+	margin-top    : 0;
+	margin-bottom : 25px;
 }
 
 nav a.router-link-exact-active {

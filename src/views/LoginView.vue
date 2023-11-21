@@ -1,9 +1,13 @@
 <script setup>
 import Navigator from "@/components/Navigator.vue";
+import LoginBox from "@/components/LoginBox.vue";
 </script>
 
 <template>
-	<Navigator />
+	<div class="main">
+		<Navigator />
+		<LoginBox :title="'Login'" />
+	</div>
 </template>
 
 <script>
