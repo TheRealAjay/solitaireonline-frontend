@@ -58,24 +58,26 @@ import {ref, onMounted} from 'vue'
 <template>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder" @drop="onDrop($event, 1)" @dragover.prevent @dragenter.prevent>
+			<div class="gameView__playArea__drawDeck__holder" @drop="onDrop($event, 1)" @dragover.prevent
+				 @dragenter.prevent>
 				<div
 					class="drag-el"
 					v-for="item in stackOne"
 					:key="item.id"
 					draggable="true"
 					@dragstart="startDrag($event, item)">
-						<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__dropZone drop-zone" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
+			<div class="gameView__playArea__drawDeck__dropZone drop-zone" @drop="onDrop($event, 2)" @dragover.prevent
+				 @dragenter.prevent>
 				<div
 					class="drag-el"
 					v-for="item in stackTwo"
 					:key="item.id"
 					draggable="true"
 					@dragstart="startDrag($event, item)">
-						<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
 		</div>
@@ -84,112 +86,503 @@ import {ref, onMounted} from 'vue'
 
 <script>
 
+
+/**
+ * Karten mit flipped false dürfen nicht draggable sein.
+ *
+ * TODO: stacks durch positionen ersetzen
+ */
+
+
 export default {
-
-	// data() {
-	// 	return {
-	// 		items: [
-	// 			{
-	// 			id: 0,
-	// 			title: 'Item A',
-	// 			list: 1,
-	// 			},
-	// 			{
-	// 			id: 1,
-	// 			title: 'Item B',
-	// 			list: 1,
-	// 			},
-	// 			{
-	// 			id: 2,
-	// 			title: 'Item C',
-	// 			list: 2,
-	// 			},
-	// 		],
-	// 	}
-  	// },
-
-//   computed: {
-//     listOne() {
-//       return this.items.filter((item) => item.list === 1)
-//     },
-//     listTwo() {
-//       return this.items.filter((item) => item.list === 2)
-//     },
-//   },
 
 	data() {
 		return {
 			cardObjects: [
 				{
-					id: 0,
-					value: 13,
-					type: 'Diamond',
-					flipped: true,
+					"id": 1,
+					"type": "Heart",
+					"value": "9",
+					"postition": "d1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null,
 					stack: 1,
 				},
 				{
-					id: 1,
-					value: 5,
-					type: 'Spade',
-					flipped: true,
-					stack: 2,
-				},
-				{
-					id: 2,
-					value: 1,
-					type: 'Heart',
-					flipped: true,
+					"id": 2,
+					"type": "Spade",
+					"value": "11",
+					"postition": "d2",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null,
 					stack: 1,
 				},
 				{
-					id: 3,
-					value: 8,
-					type: 'Clover',
-					flipped: true,
-					stack: 2,
+					"id": 3,
+					"type": "Spade",
+					"value": "10",
+					"postition": "d3",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
 				},
 				{
-					id: 4,
-					value: 11,
-					type: 'Heart',
-					flipped: true,
-					stack: 1,
+					"id": 4,
+					"type": "Spade",
+					"value": "A",
+					"postition": "d4",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 5,
+					"type": "Heart",
+					"value": "6",
+					"postition": "d5",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 6,
+					"type": "Spade",
+					"value": "9",
+					"postition": "d6",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 7,
+					"type": "Diamond",
+					"value": "11",
+					"postition": "d7",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 8,
+					"type": "Clover",
+					"value": "7",
+					"postition": "d8",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 9,
+					"type": "Clover",
+					"value": "A",
+					"postition": "d9",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 10,
+					"type": "Spade",
+					"value": "8",
+					"postition": "d10",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 11,
+					"type": "Heart",
+					"value": "3",
+					"postition": "d11",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 12,
+					"type": "Heart",
+					"value": "10",
+					"postition": "d12",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 13,
+					"type": "Diamond",
+					"value": "13",
+					"postition": "d13",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 14,
+					"type": "Heart",
+					"value": "12",
+					"postition": "d14",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 15,
+					"type": "Clover",
+					"value": "2",
+					"postition": "d15",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 16,
+					"type": "Diamond",
+					"value": "8",
+					"postition": "d16",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 17,
+					"type": "Spade",
+					"value": "3",
+					"postition": "d17",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 18,
+					"type": "Spade",
+					"value": "12",
+					"postition": "d18",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 19,
+					"type": "Diamond",
+					"value": "A",
+					"postition": "d19",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 20,
+					"type": "Clover",
+					"value": "10",
+					"postition": "d20",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 21,
+					"type": "Diamond",
+					"value": "2",
+					"postition": "d21",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 22,
+					"type": "Clover",
+					"value": "12",
+					"postition": "d22",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 23,
+					"type": "Spade",
+					"value": "13",
+					"postition": "d23",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 24,
+					"type": "Spade",
+					"value": "2",
+					"postition": "d24",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 25,
+					"type": "Heart",
+					"value": "13",
+					"postition": "c1r1",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 26,
+					"type": "Clover",
+					"value": "11",
+					"postition": "c2r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 27,
+					"type": "Clover",
+					"value": "4",
+					"postition": "c2r2",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 28,
+					"type": "Heart",
+					"value": "7",
+					"postition": "c3r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 29,
+					"type": "Spade",
+					"value": "4",
+					"postition": "c3r2",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 30,
+					"type": "Heart",
+					"value": "A",
+					"postition": "c3r3",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 31,
+					"type": "Spade",
+					"value": "5",
+					"postition": "c4r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 32,
+					"type": "Clover",
+					"value": "3",
+					"postition": "c4r2",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 33,
+					"type": "Spade",
+					"value": "7",
+					"postition": "c4r3",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 34,
+					"type": "Diamond",
+					"value": "3",
+					"postition": "c4r4",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 35,
+					"type": "Diamond",
+					"value": "6",
+					"postition": "c5r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 36,
+					"type": "Diamond",
+					"value": "12",
+					"postition": "c5r2",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 37,
+					"type": "Diamond",
+					"value": "5",
+					"postition": "c5r3",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 38,
+					"type": "Diamond",
+					"value": "7",
+					"postition": "c5r4",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 39,
+					"type": "Diamond",
+					"value": "4",
+					"postition": "c5r5",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 40,
+					"type": "Heart",
+					"value": "4",
+					"postition": "c6r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 41,
+					"type": "Clover",
+					"value": "9",
+					"postition": "c6r2",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 42,
+					"type": "Heart",
+					"value": "8",
+					"postition": "c6r3",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 43,
+					"type": "Clover",
+					"value": "13",
+					"postition": "c6r4",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 44,
+					"type": "Clover",
+					"value": "8",
+					"postition": "c6r5",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 45,
+					"type": "Heart",
+					"value": "11",
+					"postition": "c6r6",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 46,
+					"type": "Heart",
+					"value": "2",
+					"postition": "c7r1",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 47,
+					"type": "Clover",
+					"value": "5",
+					"postition": "c7r2",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 48,
+					"type": "Heart",
+					"value": "5",
+					"postition": "c7r3",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 49,
+					"type": "Diamond",
+					"value": "10",
+					"postition": "c7r4",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 50,
+					"type": "Diamond",
+					"value": "9",
+					"postition": "c7r5",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 51,
+					"type": "Spade",
+					"value": "6",
+					"postition": "c7r6",
+					"flipped": false,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
+				},
+				{
+					"id": 52,
+					"type": "Clover",
+					"value": "6",
+					"postition": "c7r7",
+					"flipped": true,
+					"solitaireSessionId": 2,
+					"solitaireSession": null
 				}
 			]
 		}
-  	},
+	},
 
-  computed: {
-    stackOne() {
-      return this.cardObjects.filter((item) => item.stack === 1)
-    },
-    stackTwo() {
-      return this.cardObjects.filter((item) => item.stack === 2)
-    },
-  },
+	computed: {
+		stackOne() {
+			return this.cardObjects.filter((item) => item.stack === 1)
+		},
+		stackTwo() {
+			return this.cardObjects.filter((item) => item.stack === 2)
+		},
+	},
 
 	name: "GameView",
-	// methods: {
-	// 	startDrag(evt, item) {
-	// 		// evt.dataTransfer.dropEffect = 'move'
-	// 		// evt.dataTransfer.effectAllowed = 'move'
-	// 		// evt.dataTransfer.setData('itemID', item.id)
-	// 		// console.log(evt);
-	// 	},
-	// 	// dragging(e, item) {
-	// 	// 	console.log(e)
-	// 	// },
-	// 	onDrop(evt, list) {
-	// 		// const itemID = evt.dataTransfer.getData('itemID')
-	// 		// const item = this.items.find((item) => item.id == itemID)
-	// 		// item.list = list
-	// 		console.log(evt);
-    // 	},
-	// 	dragEnd(evt, item) {
-	// 		console.log(evt);
-	// 	}
-	// },
-
 	methods: {
 		startDrag(evt, item) {
 			evt.dataTransfer.dropEffect = 'move'
@@ -197,9 +590,9 @@ export default {
 			evt.dataTransfer.setData('itemID', item.id)
 		},
 		onDrop(evt, stack) {
-			const itemID = evt.dataTransfer.getData('itemID')
-			const item = this.items.find((item) => item.id == itemID)
-			item.stack = stack
+			const itemID = parseInt(evt.dataTransfer.getData('itemID'));
+			const item = this.cardObjects.find((cardObj) => cardObj.id === itemID);
+			item.stack = stack;
 		},
 	},
 }
@@ -208,14 +601,14 @@ export default {
 <style scoped>
 
 .drop-zone {
-  background-color: #eee;
-  margin-bottom: 10px;
-  padding: 10px;
+	background-color : #eee;
+	margin-bottom    : 10px;
+	padding          : 10px;
 }
 
 .drag-el {
-  margin-bottom: 10px;
-  padding-top: 5px;
+	margin-bottom : 10px;
+	padding-top   : 5px;
 }
 
 </style>
