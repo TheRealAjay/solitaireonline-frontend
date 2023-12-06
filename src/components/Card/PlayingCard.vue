@@ -15,6 +15,10 @@ const backgroundURL = new URL(`/src/assets/cards/backart_2.png`, import.meta.url
 export default {
 	name: "PlayingCard",
 	props: {
+		id: {
+			type: Number,
+			required: true,
+		},
 		value: {
 			type: Number,
 			required: true,
@@ -26,7 +30,11 @@ export default {
 		flipped: {
 			type: Boolean,
 			required: true,
-		}
+		},
+		stack: {
+			type: Number,
+			required: true,
+		},
 	}
 }
 </script>

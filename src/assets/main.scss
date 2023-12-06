@@ -146,6 +146,16 @@ a, .green {
 		border-radius    : 21px;
 		border           : 3px solid #ebebeb50;
 	  }
+	  &__dropZone {
+		right             : 5%;
+		top              : 10%;
+		position         : absolute;
+		width            : 150px;
+		aspect-ratio     : 202/265;
+		background-color : transparent;
+		border-radius    : 21px;
+		border           : 3px solid #ebebeb50;
+	  }
 	}
   }
 }
