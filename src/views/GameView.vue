@@ -4,56 +4,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 
 import {ref, onMounted} from 'vue'
 
-// const cardObject = {
-// 	0: {
-// 		value: 13,
-// 		type: 'Diamond',
-// 		flipped: false,
-// 		stack: 1,
-// 	},
-// 	1: {
-// 		value: 5,
-// 		type: 'Spade',
-// 		flipped: false,
-// 		stack: 2,
-// 	},
-// 	2: {
-// 		value: 1,
-// 		type: 'Heart',
-// 		flipped: false,
-// 		stack: 1,
-// 	},
-// 	3: {
-// 		value: 8,
-// 		type: 'Clover',
-// 		flipped: false,
-// 		stack: 2,
-// 	},
-// 	4: {
-// 		value: 11,
-// 		type: 'Heart',
-// 		flipped: true,
-// 		stack: 1,
-// 	}
-// }
-
 </script>
-
-<!-- <template>
-	<div class="gameView">
-		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder">
-				<template v-for="(item, index) in cardObject">
-					<PlayingCard @drag="startDrag($event, index)" @dragend="dragEnd($event, index)" :draggable="true" :type="item.type" :value="item.value"
-					             :flipped="item.flipped" />
-				</template>
-			</div>
-			<div class="gameView__playArea__drawDeck__dropZone" @drop="onDrop($event, index)" @dragover.prevent @dragenter.prevent>
-				
-			</div>
-		</div>
-	</div>
-</template> -->
 
 <template>
 	<div class="gameView">
@@ -69,7 +20,7 @@ import {ref, onMounted} from 'vue'
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__dropZone drop-zone" @drop="onDrop($event, 2)" @dragover.prevent
+			<div class="gameView__playArea__drawDeck__dropZone" @drop="onDrop($event, 2)" @dragover.prevent
 				 @dragenter.prevent>
 				<div
 					class="drag-el"
@@ -126,16 +77,18 @@ export default {
 					"position": "d3",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 2,
 				},
 				{
 					"id": 4,
 					"type": "Spade",
-					"value": "A",
+					"value": "1",
 					"position": "d4",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 1,
 				},
 				{
 					"id": 5,
@@ -144,7 +97,8 @@ export default {
 					"position": "d5",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 2,
 				},
 				{
 					"id": 6,
@@ -153,7 +107,8 @@ export default {
 					"position": "d6",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 1,
 				},
 				{
 					"id": 7,
@@ -162,7 +117,8 @@ export default {
 					"position": "d7",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 2,
 				},
 				{
 					"id": 8,
@@ -171,12 +127,13 @@ export default {
 					"position": "d8",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 1,
 				},
 				{
 					"id": 9,
 					"type": "Clover",
-					"value": "A",
+					"value": "1",
 					"position": "d9",
 					"flipped": true,
 					"solitaireSessionId": 2,
@@ -266,7 +223,7 @@ export default {
 				{
 					"id": 19,
 					"type": "Diamond",
-					"value": "A",
+					"value": "1",
 					"position": "d19",
 					"flipped": true,
 					"solitaireSessionId": 2,
@@ -575,10 +532,12 @@ export default {
 
 	computed: {
 		stackOne() {
-			return this.cardObjects.filter((item) => item.stack === 1)
+			const filteredStackOne = this.cardObjects.filter((item) => item.stack === 1)
+			return this.orderByValue(filteredStackOne)
 		},
 		stackTwo() {
-			return this.cardObjects.filter((item) => item.stack === 2)
+			const filteredStackTwo = this.cardObjects.filter((item) => item.stack === 2)
+			return this.orderByValue(filteredStackTwo)
 		},
 	},
 
@@ -594,21 +553,17 @@ export default {
 			const item = this.cardObjects.find((cardObj) => cardObj.id === itemID);
 			item.stack = stack;
 		},
+		orderByValue(stack) {
+    		return stack.slice().sort((a, b) => b.value - a.value);
+  		},
 	},
 }
 </script>
 
 <style scoped>
 
-.drop-zone {
-	background-color : #eee;
-	margin-bottom    : 10px;
-	padding          : 10px;
-}
-
 .drag-el {
-	margin-bottom : 10px;
-	padding-top   : 5px;
+	padding-bottom : 30px;
 }
 
 </style>
