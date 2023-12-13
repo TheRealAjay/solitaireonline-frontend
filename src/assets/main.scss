@@ -101,7 +101,6 @@ a, .green {
 	align-items     : center;
 
 	&__input {
-	  margin-bottom    : 25px;
 	  padding-bottom   : 2px;
 	  @include font(left, #1c1b22, normal, normal, 400, 14px);
 	  width            : 100%;
@@ -112,6 +111,14 @@ a, .green {
 	  box-shadow       : none;
 	}
 
+	&__validation_error {
+	  @include font(left, #690909, normal, normal, 400, 14px);
+	  margin-bottom : 25px;
+	  padding-top   : 2px;
+	  text-align    : left;
+	  width         : 100%;
+	}
+
 	&__submit {
 	  @include font(center, #ebebeb, normal, normal, 400, 14px);
 	  @include button();
@@ -119,6 +126,48 @@ a, .green {
 
 	&__container {
 	  margin-top : 50px;
+	}
+  }
+
+  &__popup {
+	height           : 100%;
+	width            : 100%;
+	position         : fixed;
+	display          : flex;
+	justify-content  : center;
+	align-items      : center;
+	top              : 0;
+	left             : 0;
+	z-index          : 999;
+	background-color : rgba(54, 54, 54, 0.7);
+	backdrop-filter  : blur(3px);
+
+	&__holder {
+	  width              : 80%;
+	  max-width          : 450px;
+	  border-radius      : 25px;
+	  background-color   : #EBEBEB;
+	  box-shadow         : 10px 9px 34px -11px rgba(125, 125, 125, 0.75);
+	  -webkit-box-shadow : 10px 9px 34px -11px rgba(125, 125, 125, 0.75);
+	  -moz-box-shadow    : 10px 9px 34px -11px rgba(125, 125, 125, 0.75);
+	  min-height         : 120px;
+	  display            : flex;
+	  justify-content    : center;
+	  align-items        : center;
+	  padding            : 15px;
+	  position           : relative;
+
+	  &__icon {
+		position        : absolute;
+		display         : flex;
+		width           : 100%;
+		justify-content : center;
+		top             : 15px;
+	  }
+
+	  &__text {
+		padding-top : 25px;
+	  }
 	}
   }
 }
@@ -146,8 +195,9 @@ a, .green {
 		border-radius    : 21px;
 		border           : 3px solid #ebebeb50;
 	  }
+
 	  &__dropZone {
-		right             : 5%;
+		right            : 5%;
 		top              : 10%;
 		position         : absolute;
 		width            : 150px;
