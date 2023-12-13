@@ -10,24 +10,22 @@ import {ref, onMounted} from 'vue'
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
 			<div class="gameView__playArea__drawDeck__holder" @drop="onDrop($event, 1)" @dragover.prevent
-				 @dragenter.prevent>
-				<div
-					class="drag-el"
-					v-for="item in stackOne"
+				@dragenter.prevent>
+				<div class="drag-el"
+					v-for="(item, index) in stackOne"
 					:key="item.id"
 					draggable="true"
-					@dragstart="startDrag($event, item)">
+					@dragstart="startDrag($event, item, index, stackOne)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__dropZone" @drop="onDrop($event, 2)" @dragover.prevent
 				 @dragenter.prevent>
-				<div
-					class="drag-el"
-					v-for="item in stackTwo"
+				 <div class="drag-el"
+					v-for="(item, index) in stackTwo"
 					:key="item.id"
 					draggable="true"
-					@dragstart="startDrag($event, item)">
+					@dragstart="startDrag($event, item, index, stackTwo)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
@@ -543,19 +541,39 @@ export default {
 
 	name: "GameView",
 	methods: {
-		startDrag(evt, item) {
-			evt.dataTransfer.dropEffect = 'move'
-			evt.dataTransfer.effectAllowed = 'move'
-			evt.dataTransfer.setData('itemID', item.id)
+		startDrag(evt, item, index, stack) {
+			console.log("startDrag - Dragged Item: ", item);
+			console.log("startDrag - Index: ", index);
+			console.log("startDrag - Stack: ", stack);
+			
+			const selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
+			console.log("startDrag - Selected Cards: ", selectedCards);
+
+			evt.dataTransfer.dropEffect = 'move';
+			evt.dataTransfer.effectAllowed = 'move';
+			evt.dataTransfer.setData('selectedCards', JSON.stringify(selectedCards));
 		},
-		onDrop(evt, stack) {
-			const itemID = parseInt(evt.dataTransfer.getData('itemID'));
-			const item = this.cardObjects.find((cardObj) => cardObj.id === itemID);
-			item.stack = stack;
+
+		onDrop(evt, targetStack) {
+			const selectedCards = JSON.parse(evt.dataTransfer.getData('selectedCards'));
+			const itemID = selectedCards[0].id; // Taking the first card ID from the selected cards
+
+			console.log("onDrop - Selected Cards: ", selectedCards);
+			console.log("onDrop - Target Stack: ", targetStack);
+
+			selectedCards.forEach(card => {
+				card.stack = targetStack;
+			});
+
+			// Update the original cardObjects with the modified cards
+			this.cardObjects = this.cardObjects.map((card) => {
+				const updatedCard = selectedCards.find((c) => c.id === card.id);
+				return updatedCard ? { ...card, stack: updatedCard.stack } : card;
+			});
 		},
 		orderByValue(stack) {
-    		return stack.slice().sort((a, b) => b.value - a.value);
-  		},
+			return stack.slice().sort((a, b) => b.value - a.value);
+		},
 	},
 }
 </script>
