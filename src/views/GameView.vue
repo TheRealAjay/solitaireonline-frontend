@@ -11,7 +11,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackOne"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 45 + 'px'}"
+					 :style="{top: index * 45 + 'px', zIndex: index}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -27,7 +27,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackTwo"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 45 + 'px'}"
+					 :style="{top: index * 45 + 'px', zIndex: index}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -581,6 +581,7 @@ export default {
 		moveCard(card, index, clientX, clientY) {
 			const elem = document.getElementById('card-' + card.id);
 			elem.style.position = 'fixed';
+			elem.style.zIndex = 999 + '';
 			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
 			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
 		},
