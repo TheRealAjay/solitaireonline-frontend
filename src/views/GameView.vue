@@ -19,7 +19,7 @@ import {ref, onMounted} from 'vue'
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__dropZone" @drop="onDrop($event, 2)" @dragover.prevent
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--right" @drop="onDrop($event, 2)" @dragover.prevent
 				 @dragenter.prevent>
 				 <div class="drag-el"
 					v-for="(item, index) in stackTwo"

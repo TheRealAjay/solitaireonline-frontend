@@ -190,21 +190,20 @@ a, .green {
 		top              : 10%;
 		position         : absolute;
 		width            : 150px;
-		aspect-ratio     : 202/265;
+		height     : 200px;
 		background-color : transparent;
 		border-radius    : 21px;
 		border           : 3px solid #ebebeb50;
+		overflow-y		 : visible;
+		scrollbar-width	 : none; /* Hide the scrollbar in Firefox */
+		-ms-overflow-style: none; /* Hide the scrollbar in Internet Explorer/Edge */
+		&--right{
+			left: unset;
+			right: 5%;
+		}
 	  }
-
-	  &__dropZone {
-		right            : 5%;
-		top              : 10%;
-		position         : absolute;
-		width            : 150px;
-		aspect-ratio     : 202/265;
-		background-color : transparent;
-		border-radius    : 21px;
-		border           : 3px solid #ebebeb50;
+	  &__holder::-webkit-scrollbar {
+		display: none; /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
 	  }
 	}
   }
