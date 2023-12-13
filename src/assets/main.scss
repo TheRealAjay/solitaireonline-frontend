@@ -186,24 +186,26 @@ a, .green {
 
 	&__drawDeck {
 	  &__holder {
-		left             : 5%;
-		top              : 10%;
-		position         : absolute;
-		width            : 150px;
-		height     : 200px;
-		background-color : transparent;
-		border-radius    : 21px;
-		border           : 3px solid #ebebeb50;
-		overflow-y		 : visible;
-		scrollbar-width	 : none; /* Hide the scrollbar in Firefox */
-		-ms-overflow-style: none; /* Hide the scrollbar in Internet Explorer/Edge */
-		&--right{
-			left: unset;
-			right: 5%;
+		left               : 5%;
+		top                : 10%;
+		position           : absolute;
+		z-index            : 999;
+		width              : 150px;
+		height             : 200px;
+		background-color   : transparent;
+		border-radius      : 21px;
+		border             : 3px solid #ebebeb50;
+		overflow-y         : visible;
+		scrollbar-width    : none; /* Hide the scrollbar in Firefox */
+		-ms-overflow-style : none; /* Hide the scrollbar in Internet Explorer/Edge */
+		&--right {
+		  left  : unset;
+		  right : 5%;
 		}
 	  }
+
 	  &__holder::-webkit-scrollbar {
-		display: none; /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
+		display : none; /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
 	  }
 	}
   }

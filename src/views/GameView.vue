@@ -1,32 +1,40 @@
 <script setup>
 import background_image from "../assets/background.png";
 import PlayingCard from "@/components/Card/PlayingCard.vue";
-
-import {ref, onMounted} from 'vue'
-
 </script>
 
 <template>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder" @drop="onDrop($event, 1)" @dragover.prevent
-				@dragenter.prevent>
+			<div class="gameView__playArea__drawDeck__holder" data-stack="1">
 				<div class="drag-el"
-					v-for="(item, index) in stackOne"
-					:key="item.id"
-					draggable="true"
-					@dragstart="startDrag($event, item, index, stackOne)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
+					 v-for="(item, index) in stackOne"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 45 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackOne)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--right" @drop="onDrop($event, 2)" @dragover.prevent
-				 @dragenter.prevent>
-				 <div class="drag-el"
-					v-for="(item, index) in stackTwo"
-					:key="item.id"
-					draggable="true"
-					@dragstart="startDrag($event, item, index, stackTwo)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" />
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--right"
+				 data-stack="2">
+				<div class="drag-el"
+					 v-for="(item, index) in stackTwo"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 45 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackTwo)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
 				</div>
 			</div>
 		</div>
@@ -34,17 +42,12 @@ import {ref, onMounted} from 'vue'
 </template>
 
 <script>
-
-
 /**
  * Karten mit flipped false dürfen nicht draggable sein.
  *
  * TODO: stacks durch positionen ersetzen
  */
-
-
 export default {
-
 	data() {
 		return {
 			cardObjects: [
@@ -524,10 +527,11 @@ export default {
 					"solitaireSessionId": 2,
 					"solitaireSession": null
 				}
-			]
+			],
+			selectedCards: null,
+			targetStack: null,
 		}
 	},
-
 	computed: {
 		stackOne() {
 			const filteredStackOne = this.cardObjects.filter((item) => item.stack === 1)
@@ -538,38 +542,47 @@ export default {
 			return this.orderByValue(filteredStackTwo)
 		},
 	},
-
 	name: "GameView",
 	methods: {
 		startDrag(evt, item, index, stack) {
-			console.log("startDrag - Dragged Item: ", item);
-			console.log("startDrag - Index: ", index);
-			console.log("startDrag - Stack: ", stack);
-			
-			const selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
-			console.log("startDrag - Selected Cards: ", selectedCards);
-
-			evt.dataTransfer.dropEffect = 'move';
-			evt.dataTransfer.effectAllowed = 'move';
-			evt.dataTransfer.setData('selectedCards', JSON.stringify(selectedCards));
+			this.selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
+			document.addEventListener("mousemove", this.onDrag);
+			document.addEventListener("mouseup", this.endDrag);
 		},
+		onDrag(e) {
+			let {clientX, clientY} = e;
+			this.selectedCards.forEach((card, index) => {
+				this.moveCard(card, index, clientX, clientY);
+			});
+			const elem = document.elementsFromPoint(clientX, clientY).filter(element => element.classList.contains('gameView__playArea__drawDeck__holder'))[0]
+			if (elem) {
+				this.targetStack = parseInt(elem.dataset.stack);
+			} else {
+				this.targetStack = null;
+			}
+		},
+		endDrag(e) {
+			document.removeEventListener("mousemove", this.onDrag);
+			document.removeEventListener("mouseup", this.endDrag);
 
-		onDrop(evt, targetStack) {
-			const selectedCards = JSON.parse(evt.dataTransfer.getData('selectedCards'));
-			const itemID = selectedCards[0].id; // Taking the first card ID from the selected cards
-
-			console.log("onDrop - Selected Cards: ", selectedCards);
-			console.log("onDrop - Target Stack: ", targetStack);
-
-			selectedCards.forEach(card => {
-				card.stack = targetStack;
+			this.selectedCards.forEach((card, index) => {
+				const elem = document.getElementById('card-' + card.id);
+				elem.style.position = 'absolute';
+				elem.style.left = 0 + 'px';
+				elem.style.top = index * 45 + 'px';
+				card.stack = this.targetStack ?? card.stack;
 			});
 
-			// Update the original cardObjects with the modified cards
 			this.cardObjects = this.cardObjects.map((card) => {
-				const updatedCard = selectedCards.find((c) => c.id === card.id);
-				return updatedCard ? { ...card, stack: updatedCard.stack } : card;
+				const updatedCard = this.selectedCards.find((c) => c.id === card.id);
+				return updatedCard ? {...card, stack: updatedCard.stack} : card;
 			});
+		},
+		moveCard(card, index, clientX, clientY) {
+			const elem = document.getElementById('card-' + card.id);
+			elem.style.position = 'fixed';
+			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
+			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
 		},
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => b.value - a.value);
@@ -581,7 +594,9 @@ export default {
 <style scoped>
 
 .drag-el {
-	padding-bottom : 30px;
+	position : absolute;
+	width    : 145px;
+	height   : 195px;
 }
 
 </style>
