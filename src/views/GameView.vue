@@ -6,7 +6,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 <template>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder" data-stack="0">
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--d" data-stack="0">
 				<div class="drag-el"
 					 v-for="(item, index) in stackZero"
 					 :id="'card-' + item.id"
@@ -832,7 +832,7 @@ export default {
 				const elem = document.getElementById('card-' + card.id);
 				elem.style.position = 'absolute';
 				elem.style.left = 0 + 'px';
-				elem.style.top = index * 45 + 'px';
+				elem.style.top = index * 25 + 'px';
 				card.stack = this.targetStack ?? card.stack;
 			});
 
@@ -845,7 +845,7 @@ export default {
 			const elem = document.getElementById('card-' + card.id);
 			elem.style.position = 'fixed';
 			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
-			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
+			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 25 + 'px';
 			elem.style.width = 90 + 'px';
 			elem.style.height = 120 + 'px';
 		},
