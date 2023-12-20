@@ -35,6 +35,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		position: {
+			type: String,
+			required: true,
+		}
 	}
 }
 </script>

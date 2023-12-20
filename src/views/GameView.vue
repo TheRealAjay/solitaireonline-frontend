@@ -11,29 +11,125 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackOne"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 45 + 'px'}"
+					 :style="{top: index * 0 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackOne)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :type="item.type" :value="item.value" :flipped="false" id="" stack="" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--right"
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c1"
 				 data-stack="2">
 				<div class="drag-el"
 					 v-for="(item, index) in stackTwo"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 45 + 'px'}"
+					 :style="{top: index * 25 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackTwo)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c2"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c3"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c4"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c5"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c6"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+				</div>
+			</div>
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c7"
+				 data-stack="3">
+				<div class="drag-el"
+					 v-for="(item, index) in stackThree"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{top: index * 25 + 'px'}"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @mousedown="startDrag($event, item, index, stackThree)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
 				</div>
 			</div>
@@ -69,7 +165,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 3,
 				},
 				{
 					"id": 3,
@@ -99,7 +195,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 2,
+					stack: 3,
 				},
 				{
 					"id": 6,
@@ -129,7 +225,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 3,
 				},
 				{
 					"id": 9,
@@ -541,6 +637,10 @@ export default {
 			const filteredStackTwo = this.cardObjects.filter((item) => item.stack === 2)
 			return this.orderByValue(filteredStackTwo)
 		},
+		stackThree() {
+			const filteredStackThree = this.cardObjects.filter((item) => item.stack === 3)
+			return this.orderByValue(filteredStackThree)
+		}
 	},
 	name: "GameView",
 	methods: {
@@ -583,6 +683,8 @@ export default {
 			elem.style.position = 'fixed';
 			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
 			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
+			elem.style.width = 90 + 'px';
+			elem.style.height = 120 + 'px';
 		},
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => b.value - a.value);
@@ -594,9 +696,10 @@ export default {
 <style scoped>
 
 .drag-el {
-	position : absolute;
-	width    : 145px;
-	height   : 195px;
+	position: absolute;
+	width    : 100%;
+	height   : 100%;
+	align-items: center;
 }
 
 </style>
