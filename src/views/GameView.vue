@@ -6,9 +6,9 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 <template>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder" data-stack="1">
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder" data-stack="0">
 				<div class="drag-el"
-					 v-for="(item, index) in stackOne"
+					 v-for="(item, index) in stackZero"
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
@@ -17,7 +17,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
-					 @mousedown="startDrag($event, item, index, stackOne)">
+					 @mousedown="startDrag($event, item, index, stackZero)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="false" id="" stack="" />
 				</div>
 			</div>
@@ -26,7 +26,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackOne"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 0 + 'px'}"
+					 :style="{left: index * 17 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -234,7 +234,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 2,
@@ -244,7 +244,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 3,
@@ -254,7 +254,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 4,
@@ -264,7 +264,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 5,
@@ -274,7 +274,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 6,
@@ -284,7 +284,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 7,
@@ -294,7 +294,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 8,
@@ -304,7 +304,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 9,
@@ -314,7 +314,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 10,
@@ -324,7 +324,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 11,
@@ -334,7 +334,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 12,
@@ -344,7 +344,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 13,
@@ -354,7 +354,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 14,
@@ -364,7 +364,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 15,
@@ -374,7 +374,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 16,
@@ -384,7 +384,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 17,
@@ -394,7 +394,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 18,
@@ -404,7 +404,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 19,
@@ -414,7 +414,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 20,
@@ -424,7 +424,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 21,
@@ -434,7 +434,7 @@ export default {
 					"flipped": true,
 					"solitaireSessionId": 2,
 					"solitaireSession": null,
-					stack: 1,
+					stack: 0,
 				},
 				{
 					"id": 22,
@@ -752,6 +752,10 @@ export default {
 		}
 	},
 	computed: {
+		stackZero() {
+			const filteredStackZero = this.cardObjects.filter((item) => item.stack === 0)
+			return this.orderByValue(filteredStackZero)
+		},
 		stackOne() {
 			const filteredStackOne = this.cardObjects.filter((item) => item.stack === 1)
 			return this.orderByValue(filteredStackOne)
