@@ -790,19 +790,19 @@ export default {
 		},
 		stackNine() {
 			const filteredStackNine = this.cardObjects.filter((item) => item.stack === 9)
-			return this.orderByValue(filteredStackNine)
+			return this.orderByValueDESC(filteredStackNine)
 		},
 		stackTen() {
 			const filteredStackTen = this.cardObjects.filter((item) => item.stack === 10)
-			return this.orderByValue(filteredStackTen)
+			return this.orderByValueDESC(filteredStackTen)
 		},
 		stackEleven() {
 			const filteredStackEleven = this.cardObjects.filter((item) => item.stack === 11)
-			return this.orderByValue(filteredStackEleven)
+			return this.orderByValueDESC(filteredStackEleven)
 		},
 		stackTwelve() {
 			const filteredStackTwelve = this.cardObjects.filter((item) => item.stack === 12)
-			return this.orderByValue(filteredStackTwelve)
+			return this.orderByValueDESC(filteredStackTwelve)
 		},
 	},
 	name: "GameView",
@@ -851,6 +851,9 @@ export default {
 		},
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => b.value - a.value);
+		},
+		orderByValueDESC(stack) {
+			return stack.slice().sort((a, b) => a.value - b.value);
 		},
 	},
 }
