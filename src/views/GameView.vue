@@ -154,7 +154,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackNine"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 0 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -170,7 +170,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackTen"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 0 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -186,7 +186,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackEleven"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 0 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -202,7 +202,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackTwelve"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 0 + 'px'}"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -743,7 +743,8 @@ export default {
 					"position": "c7r7",
 					"flipped": true,
 					"solitaireSessionId": 2,
-					"solitaireSession": null
+					"solitaireSession": null,
+					stack: 8,
 				}
 			],
 			selectedCards: null,
