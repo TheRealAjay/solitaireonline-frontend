@@ -1,6 +1,9 @@
 <template>
-    <div class="scoreView">
-        <Scatter :data="data" :options="options" />
+    <h2 style="display: flex; justify-content: center; padding-top: 25px">
+        Scores von {{ player }}
+    </h2>
+    <div class="scoreView" style="margin: auto auto; height: 80vh">
+        <Scatter v-if="!isLoading" :data="data" :options="options" />
     </div>
 </template>
 
@@ -32,18 +35,10 @@ const data = {
         {
             label: "Scores",
             fill: false,
+            pointRadius: 4,
             borderColor: "#00bd7e",
             backgroundColor: "#00bd7e",
-            data: [
-                {
-                    x: new Date("1970-01-01T02:11:30"),
-                    y: 360,
-                },
-                {
-                    x: new Date("1970-01-01T04:20:30"),
-                    y: 500,
-                },
-            ],
+            data: null,
         },
     ],
 };
@@ -53,26 +48,55 @@ const options = {
     maintainAspectRatio: false,
     scales: {
         x: {
-            type: "time",
-            time: {
-                displayFormats: {
-                    hour: "hh:mm:ss",
+            beginAtZero: true,
+            title: {
+                display: true,
+                text: "Zeit [Minuten]",
+                color: "#aaa",
+            },
+            ticks: {
+                color: "#aaa",
+                callback: function (val) {
+                    let value = this.getLabelForValue(val);
+                    return value + " min";
                 },
+            },
+            grid: {
+                color: "#555",
+            },
+        },
+
+        y: {
+            title: {
+                display: true,
+                text: "Punkte",
+                color: "#aaa",
+            },
+            beginAtZero: true,
+            ticks: {
+                color: "#aaa",
+            },
+            grid: {
+                color: "#555",
             },
         },
     },
+
     plugins: {
         tooltip: {
             callbacks: {
                 label: function (context) {
-                    let label = "Zeit: ";
+                    let time = "Zeit: ";
+                    if (context.parsed.x !== null) {
+                        let xTime = context.parsed.x;
+                        let seconds = (xTime % Math.floor(xTime)) * 60;
+                        time += `${parseInt(xTime / 60)}:`;
+                        xTime %= 60;
+                        time += `${
+                            xTime - (xTime % Math.floor(xTime))
+                        }:${seconds}`;
 
-                    if (context.parsed.y !== null) {
-                        label += context.formattedValue
-                            .split(",")[2]
-                            .split(" am")[0];
-                        label += " Score: ";
-                        label += context.parsed.y;
+                        return time + ` Score: ${context.parsed.y}`;
                     }
                     return label;
                 },
@@ -84,28 +108,14 @@ const options = {
 export default {
     data() {
         return {
-            scoresObjects: [
-                {
-                    id: 1,
-                    isFinished: true,
-                    gameDuration: "02:11:30",
-                    scoreCount: 360,
-                    applicationUserId: "287db47c-0d50-4ec3-915b-d61921befe02",
-                    applicationUser: null,
-                },
-                {
-                    id: 2,
-                    isFinished: true,
-                    gameDuration: "04:20:30",
-                    scoreCount: 500,
-                    applicationUserId: "287db47c-0d50-4ec3-915b-d61921befe02",
-                    applicationUser: null,
-                },
-            ],
             data: data,
             options: options,
+            player: "",
+            isLoading: true,
+            max: 10,
         };
     },
+
     name: "App",
     components: {
         Scatter,
@@ -124,41 +134,33 @@ export default {
                 },
             });
             return await response.json();
+        },
 
-            return this.scoresObjects;
+        parseScore() {
+            if (this.scores != null && this.scores.length > 0) {
+                data.datasets[0].data = [];
+                for (let i = 0; i < this.scores.length; i++) {
+                    if (this.max < this.scores[i].scoreCount) {
+                        this.max = this.scores[i].scoreCount;
+                    }
+
+                    data.datasets[0].data.push({
+                        x: this.scores[i].minutes,
+                        y: this.scores[i].scoreCount,
+                    });
+                }
+
+                options.scales.y.max = parseInt(this.max * 1.15);
+            }
         },
     },
 
     async created() {
+        this.isLoading = true;
+        this.player = localStorage.UserName;
         this.scores = await this.getScores();
-
-        if (this.scores == null || this.scores.length == 0) {
-            data.datasets[0].data = [
-                {
-                    x: new Date(
-                        "1970-01-01T" + this.scoresObjects[0].gameDuration
-                    ),
-                    y: this.scoresObjects[0].scoreCount,
-                },
-                {
-                    x: new Date(
-                        "1970-01-01T" + this.scoresObjects[1].gameDuration
-                    ),
-                    y: this.scoresObjects[1].scoreCount,
-                },
-            ];
-        } else {
-            for (let i = 0; i < this.scores.length; i++) {
-                data.datasets[0].data = [
-                    {
-                        x: new Date(
-                            "1970-01-01T" + this.scoresObjects[i].gameDuration
-                        ),
-                        y: this.scoresObjects[i].scoreCount,
-                    },
-                ];
-            }
-        }
+        this.parseScore();
+        this.isLoading = false;
     },
 };
 </script>
