@@ -1,11 +1,22 @@
 <template>
-    <h2 style="display: flex; justify-content: center; padding-top: 25px">
-        Scores von {{ player }}
-    </h2>
-    <div class="scoreView" style="margin: auto auto; height: 80vh">
+    <h2 class="score-heading">Scores von {{ player }}</h2>
+    <div class="score-chart">
         <Scatter v-if="!isLoading" :data="data" :options="options" />
     </div>
 </template>
+
+<style>
+.score-heading {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+
+.score-chart {
+    margin: auto auto;
+    height: 80vh;
+}
+</style>
 
 <script>
 import config from "../../config";
