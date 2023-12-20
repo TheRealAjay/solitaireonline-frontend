@@ -193,11 +193,14 @@ a, .green {
 		width              : 90px;
 		height             : 120px;
 		background-color   : transparent;
-		border-radius      : 21px;
+		border-radius      : 10px;
 		border             : 1px solid #ebebeb50;
 		overflow-y         : visible;
 		scrollbar-width    : none; /* Hide the scrollbar in Firefox */
 		-ms-overflow-style : none; /* Hide the scrollbar in Internet Explorer/Edge */
+		&--df{
+			left: 17%;
+		}
 		&--c1 {
 		  top: 30%;
 		}
@@ -225,7 +228,18 @@ a, .green {
 			top: 30%;
 			left: 87%;
 		}
-
+		&--b1 {
+			left: 45%;
+		}
+		&--b2 {
+			left: 59%;
+		}
+		&--b3 {
+			left: 73%;
+		}
+		&--b4 {
+			left: 87%;
+		}
 	  }
 
 	  &__holder::-webkit-scrollbar {
