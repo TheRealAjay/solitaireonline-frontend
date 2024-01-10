@@ -412,6 +412,7 @@ export default {
 			document.removeEventListener("mousemove", this.onDrag);
 			document.removeEventListener("mouseup", this.endDrag);
 
+			const fromPosition = this.selectedCards[0].position;
 			let targetStackNode;
 
 			for (const stack of document.getElementsByClassName("gameView__playArea__drawDeck__holder")) {
@@ -420,14 +421,59 @@ export default {
 				}
 			}
 
-			this.selectedCards.forEach((card, index) => {
-				card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
-			});
+			if (!this.targetStack) {
+				this.selectedCards.forEach((card) => {
+					this.resetCardPos(card, parseInt(card.position.split("r")[1]) - 1)
+				});
+				return;
+			}
 
-			this.cardObjects = this.cardObjects.map((card) => {
-				const updatedCard = this.selectedCards.find((c) => c.id === card.id);
-				return updatedCard ? updatedCard : card;
-			}).sort((a, b) => b.position - a.position);
+			const moveCard = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				},
+				body: JSON.stringify({
+					fromPosition: fromPosition,
+					toPosition: this.targetStack + "r" + (targetStackNode.childElementCount + 1),
+					solitaireSessionId: localStorage.SessionID
+				})
+			};
+
+			const reqURL = this.selectedCards.length > 1 ? '/Game/moveMore' : '/Game/move';
+
+			fetch(config.api.url + reqURL, moveCard).then(async response => {
+				const isJson = response.headers.get('content-type')?.includes('application/json');
+				const data = isJson && await response.json();
+
+				if (response.ok) {
+					if (data === true) {
+						this.selectedCards.forEach((card, index) => {
+							card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
+						});
+
+						this.cardObjects = this.cardObjects.map((card) => {
+							const updatedCard = this.selectedCards.find((c) => c.id === card.id);
+							return updatedCard ? updatedCard : card;
+						});
+					} else {
+						this.selectedCards.forEach((card) => {
+							this.resetCardPos(card, parseInt(card.position.split("r")[1]) - 1)
+						});
+						return;
+					}
+				}
+
+				// check for error response
+				if (!response.ok) {
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			}).catch(error => {
+				console.error("There was an error!", error);
+			});
 		},
 		moveCard(card, index, clientX, clientY) {
 			const elem = document.getElementById('card-' + card.id);
@@ -437,6 +483,15 @@ export default {
 			elem.style.width = 90 + 'px';
 			elem.style.height = 120 + 'px';
 			elem.style.zIndex = 999;
+		},
+		resetCardPos(card, index) {
+			const elem = document.getElementById('card-' + card.id);
+			elem.style.position = null;
+			elem.style.left = null;
+			elem.style.top = index * 25 + 'px';
+			elem.style.width = null;
+			elem.style.height = null;
+			elem.style.zIndex = null;
 		},
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => parseInt(a.position.split("r")[1]) - parseInt(b.position.split("r")[1]));
