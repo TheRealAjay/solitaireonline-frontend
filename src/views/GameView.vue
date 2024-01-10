@@ -273,7 +273,7 @@ export default {
 				})
 			}
 
-			fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
+			fetch(config.api.url + '/Game/getCards', initGame).then(async response => {
 				const isJson = response.headers.get('content-type')?.includes('application/json');
 				const data = isJson && await response.json();
 				if (response.ok) {
@@ -285,6 +285,23 @@ export default {
 					// get error message from body or default to response status
 					const error = (data && data.message) || response.status;
 					return Promise.reject(error);
+				}
+			}).then(() => {
+				if (this.cardObjects.length === 0) {
+					fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
+						const isJson = response.headers.get('content-type')?.includes('application/json');
+						const data = isJson && await response.json();
+						if (response.ok) {
+							this.cardObjects = data;
+						}
+
+						// check for error response
+						if (!response.ok) {
+							// get error message from body or default to response status
+							const error = (data && data.message) || response.status;
+							return Promise.reject(error);
+						}
+					});
 				}
 			});
 		}
@@ -353,7 +370,7 @@ export default {
 			});
 			const elem = document.elementsFromPoint(clientX, clientY).filter(element => element.classList.contains('gameView__playArea__drawDeck__holder'))[0]
 			if (elem) {
-				this.targetStack = parseInt(elem.dataset.position);
+				this.targetStack = elem.dataset.position;
 			} else {
 				this.targetStack = null;
 			}
@@ -385,10 +402,10 @@ export default {
 			elem.style.zIndex = 999;
 		},
 		orderByValue(stack) {
-			return stack.slice().sort((a, b) => b.value - a.value);
+			return stack.slice().sort((a, b) => b.position - a.position);
 		},
 		orderByValueDESC(stack) {
-			return stack.slice().sort((a, b) => a.value - b.value);
+			return stack.slice().sort((a, b) => a.position - b.position);
 		},
 	},
 }
