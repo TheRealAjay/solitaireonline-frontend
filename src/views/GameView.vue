@@ -6,7 +6,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 <template>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--d" data-stack="0">
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--d" data-position="d1">
 				<div class="drag-el"
 					 v-for="(item, index) in stackZero"
 					 :id="'card-' + item.id"
@@ -21,7 +21,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					<PlayingCard :type="item.type" :value="item.value" :flipped="false" id="" stack="" />
 				</div>
 			</div>
-			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--df" data-stack="1">
+			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--df" data-position="d2">
 				<div class="drag-el"
 					 v-for="(item, index) in stackOne"
 					 :id="'card-' + item.id"
@@ -37,7 +37,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c1"
-				 data-stack="2">
+				 data-position="c1">
 				<div class="drag-el"
 					 v-for="(item, index) in stackTwo"
 					 :id="'card-' + item.id"
@@ -53,7 +53,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c2"
-				 data-stack="3">
+				 data-position="c2">
 				<div class="drag-el"
 					 v-for="(item, index) in stackThree"
 					 :id="'card-' + item.id"
@@ -69,7 +69,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c3"
-				 data-stack="4">
+				 data-position="c3">
 				<div class="drag-el"
 					 v-for="(item, index) in stackFour"
 					 :id="'card-' + item.id"
@@ -85,7 +85,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c4"
-				 data-stack="5">
+				 data-position="c4">
 				<div class="drag-el"
 					 v-for="(item, index) in stackFive"
 					 :id="'card-' + item.id"
@@ -101,7 +101,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c5"
-				 data-stack="6">
+				 data-position="c5">
 				<div class="drag-el"
 					 v-for="(item, index) in stackSix"
 					 :id="'card-' + item.id"
@@ -117,7 +117,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c6"
-				 data-stack="7">
+				 data-position="c6">
 				<div class="drag-el"
 					 v-for="(item, index) in stackSeven"
 					 :id="'card-' + item.id"
@@ -133,7 +133,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c7"
-				 data-stack="8">
+				 data-position="c7">
 				<div class="drag-el"
 					 v-for="(item, index) in stackEight"
 					 :id="'card-' + item.id"
@@ -149,7 +149,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b1"
-				 data-stack="9">
+				 data-position="b1">
 				<div class="drag-el"
 					 v-for="(item, index) in stackNine"
 					 :id="'card-' + item.id"
@@ -165,7 +165,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b2"
-				 data-stack="10">
+				 data-position="b2">
 				<div class="drag-el"
 					 v-for="(item, index) in stackTen"
 					 :id="'card-' + item.id"
@@ -181,7 +181,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b3"
-				 data-stack="11">
+				 data-position="b3">
 				<div class="drag-el"
 					 v-for="(item, index) in stackEleven"
 					 :id="'card-' + item.id"
@@ -197,7 +197,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b4"
-				 data-stack="12">
+				 data-position="b4">
 				<div class="drag-el"
 					 v-for="(item, index) in stackTwelve"
 					 :id="'card-' + item.id"
@@ -217,6 +217,8 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 </template>
 
 <script>
+
+import config from "../../config";
 
 /**
  * Karten mit flipped false dürfen nicht draggable sein.
@@ -752,61 +754,122 @@ export default {
 			targetStack: null,
 		}
 	},
+	beforeCreate() {
+		const getSession = {
+			method: 'GET',
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Authorization": `Bearer ${localStorage.BearerToken}`,
+			}
+		};
+		fetch(config.api.url + '/Session/get', getSession)
+			.then(async response => {
+				const isJson = response.headers.get('content-type')?.includes('application/json');
+				const data = isJson && await response.json();
+
+				if (response.ok) {
+					localStorage.SessionID = data.id;
+				}
+
+				// check for error response
+				if (!response.ok) {
+					localStorage.SessionID = null;
+					// get error message from body or default to response status
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			})
+			.catch(error => {
+				console.error("There was an error!", error);
+			});
+
+		if (localStorage.SessionID) {
+			const initGame = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				},
+				body: JSON.stringify({
+					solitaireSessionId: localStorage.SessionID
+				})
+			}
+
+			fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
+				const isJson = response.headers.get('content-type')?.includes('application/json');
+				const data = isJson && await response.json();
+				if (response.ok) {
+					console.log(this.cardObjects)
+					this.cardObjects = data;
+					console.log(this.cardObjects)
+				}
+
+				// check for error response
+				if (!response.ok) {
+					// get error message from body or default to response status
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			});
+		}
+	},
+	name: "GameView",
 	computed: {
 		stackZero() {
-			const filteredStackZero = this.cardObjects.filter((item) => item.stack === 0)
+			const filteredStackZero = this.cardObjects.filter((item) => item.position.startsWith("d1"))
 			return this.orderByValue(filteredStackZero)
 		},
 		stackOne() {
-			const filteredStackOne = this.cardObjects.filter((item) => item.stack === 1)
+			const filteredStackOne = this.cardObjects.filter((item) => item.position.startsWith("d2"))
 			return this.orderByValue(filteredStackOne)
 		},
 		stackTwo() {
-			const filteredStackTwo = this.cardObjects.filter((item) => item.stack === 2)
+			const filteredStackTwo = this.cardObjects.filter((item) => item.position.startsWith("c1"))
 			return this.orderByValue(filteredStackTwo)
 		},
 		stackThree() {
-			const filteredStackThree = this.cardObjects.filter((item) => item.stack === 3)
+			const filteredStackThree = this.cardObjects.filter((item) => item.position.startsWith("c2"))
 			return this.orderByValue(filteredStackThree)
 		},
 		stackFour() {
-			const filteredStackFour = this.cardObjects.filter((item) => item.stack === 4)
+			const filteredStackFour = this.cardObjects.filter((item) => item.position.startsWith("c3"))
 			return this.orderByValue(filteredStackFour)
 		},
 		stackFive() {
-			const filteredStackFive = this.cardObjects.filter((item) => item.stack === 5)
+			const filteredStackFive = this.cardObjects.filter((item) => item.position.startsWith("c4"))
 			return this.orderByValue(filteredStackFive)
 		},
 		stackSix() {
-			const filteredStackSix = this.cardObjects.filter((item) => item.stack === 6)
+			const filteredStackSix = this.cardObjects.filter((item) => item.position.startsWith("c5"))
 			return this.orderByValue(filteredStackSix)
 		},
 		stackSeven() {
-			const filteredStackSeven = this.cardObjects.filter((item) => item.stack === 7)
+			const filteredStackSeven = this.cardObjects.filter((item) => item.position.startsWith("c6"))
 			return this.orderByValue(filteredStackSeven)
 		},
 		stackEight() {
-			const filteredStackEight = this.cardObjects.filter((item) => item.stack === 8)
+			const filteredStackEight = this.cardObjects.filter((item) => item.position.startsWith("c7"))
 			return this.orderByValue(filteredStackEight)
 		},
 		stackNine() {
-			const filteredStackNine = this.cardObjects.filter((item) => item.stack === 9)
+			const filteredStackNine = this.cardObjects.filter((item) => item.position.startsWith("b1"))
 			return this.orderByValueDESC(filteredStackNine)
 		},
 		stackTen() {
-			const filteredStackTen = this.cardObjects.filter((item) => item.stack === 10)
+			const filteredStackTen = this.cardObjects.filter((item) => item.position.startsWith("b2"))
 			return this.orderByValueDESC(filteredStackTen)
 		},
 		stackEleven() {
-			const filteredStackEleven = this.cardObjects.filter((item) => item.stack === 11)
+			const filteredStackEleven = this.cardObjects.filter((item) => item.position.startsWith("b3"))
 			return this.orderByValueDESC(filteredStackEleven)
 		},
 		stackTwelve() {
-			const filteredStackTwelve = this.cardObjects.filter((item) => item.stack === 12)
+			const filteredStackTwelve = this.cardObjects.filter((item) => item.position.startsWith("b4"))
 			return this.orderByValueDESC(filteredStackTwelve)
 		},
 	},
-	name: "GameView",
 	methods: {
 		startDrag(evt, item, index, stack) {
 			this.selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
@@ -820,7 +883,7 @@ export default {
 			});
 			const elem = document.elementsFromPoint(clientX, clientY).filter(element => element.classList.contains('gameView__playArea__drawDeck__holder'))[0]
 			if (elem) {
-				this.targetStack = parseInt(elem.dataset.stack);
+				this.targetStack = parseInt(elem.dataset.position);
 			} else {
 				this.targetStack = null;
 			}
@@ -834,12 +897,12 @@ export default {
 				elem.style.position = 'absolute';
 				elem.style.left = 0 + 'px';
 				elem.style.top = index * 25 + 'px';
-				card.stack = this.targetStack ?? card.stack;
+				card.position = this.targetStack ?? card.position;
 			});
 
 			this.cardObjects = this.cardObjects.map((card) => {
 				const updatedCard = this.selectedCards.find((c) => c.id === card.id);
-				return updatedCard ? {...card, stack: updatedCard.stack} : card;
+				return updatedCard ? {...card, position: updatedCard.position} : card;
 			});
 		},
 		moveCard(card, index, clientX, clientY) {
