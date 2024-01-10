@@ -353,7 +353,7 @@ export default {
 			});
 			const elem = document.elementsFromPoint(clientX, clientY).filter(element => element.classList.contains('gameView__playArea__drawDeck__holder'))[0]
 			if (elem) {
-				this.targetStack = parseInt(elem.dataset.position);
+				this.targetStack = elem.dataset.position;
 			} else {
 				this.targetStack = null;
 			}
@@ -385,10 +385,10 @@ export default {
 			elem.style.zIndex = 999;
 		},
 		orderByValue(stack) {
-			return stack.slice().sort((a, b) => b.value - a.value);
+			return stack.slice().sort((a, b) => b.position - a.position);
 		},
 		orderByValueDESC(stack) {
-			return stack.slice().sort((a, b) => a.value - b.value);
+			return stack.slice().sort((a, b) => a.position - b.position);
 		},
 	},
 }
