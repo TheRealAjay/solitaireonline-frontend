@@ -239,28 +239,26 @@ export default {
 				"Authorization": `Bearer ${localStorage.BearerToken}`,
 			}
 		};
-		fetch(config.api.url + '/Session/get', getSession)
-			.then(async response => {
-				const isJson = response.headers.get('content-type')?.includes('application/json');
-				const data = isJson && await response.json();
+		fetch(config.api.url + '/Session/get', getSession).then(async response => {
+			const isJson = response.headers.get('content-type')?.includes('application/json');
+			const data = isJson && await response.json();
 
-				if (response.ok) {
-					localStorage.SessionID = data.id;
-				}
+			if (response.ok) {
+				localStorage.SessionID = parseInt(data.id);
+			}
 
-				// check for error response
-				if (!response.ok) {
-					localStorage.SessionID = null;
-					// get error message from body or default to response status
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
-				}
-			})
-			.catch(error => {
-				console.error("There was an error!", error);
-			});
+			// check for error response
+			if (!response.ok) {
+				localStorage.SessionID = 0;
+				// get error message from body or default to response status
+				const error = (data && data.message) || response.status;
+				return Promise.reject(error);
+			}
+		}).catch(error => {
+			console.error("There was an error!", error);
+		});
 
-		if (localStorage.SessionID) {
+		if (localStorage.SessionID && localStorage.SessionID !== 0) {
 			const initGame = {
 				method: 'POST',
 				headers: {
