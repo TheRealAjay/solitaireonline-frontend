@@ -217,6 +217,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 </template>
 
 <script>
+
 /**
  * Karten mit flipped false dürfen nicht draggable sein.
  *
@@ -848,6 +849,7 @@ export default {
 			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 25 + 'px';
 			elem.style.width = 90 + 'px';
 			elem.style.height = 120 + 'px';
+			elem.style.zIndex = 999;
 		},
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => b.value - a.value);
@@ -862,10 +864,10 @@ export default {
 <style scoped>
 
 .drag-el {
-	position: absolute;
-	width    : 100%;
-	height   : 100%;
-	align-items: center;
+	position    : absolute;
+	width       : 100%;
+	height      : 100%;
+	align-items : center;
 }
 
 </style>
