@@ -13,6 +13,8 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
@@ -40,13 +42,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackTwo)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c2"
@@ -56,13 +61,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackThree)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c3"
@@ -72,13 +80,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackFour)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c4"
@@ -88,13 +99,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackFive)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c5"
@@ -104,13 +118,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackSix)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c6"
@@ -120,13 +137,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackSeven)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c7"
@@ -136,13 +156,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 25 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackEight)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b1"
@@ -152,13 +175,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackNine)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b2"
@@ -168,13 +194,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackTen)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b3"
@@ -184,13 +213,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackEleven)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--b4"
@@ -200,13 +232,16 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 :id="'card-' + item.id"
 					 :key="item.id"
 					 :style="{top: index * 0 + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackTwelve)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id="" stack="" />
+					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 		</div>
@@ -377,18 +412,22 @@ export default {
 			document.removeEventListener("mousemove", this.onDrag);
 			document.removeEventListener("mouseup", this.endDrag);
 
+			let targetStackNode;
+
+			for (const stack of document.getElementsByClassName("gameView__playArea__drawDeck__holder")) {
+				if (stack.dataset.position.includes(this.targetStack)) {
+					targetStackNode = stack;
+				}
+			}
+
 			this.selectedCards.forEach((card, index) => {
-				const elem = document.getElementById('card-' + card.id);
-				elem.style.position = 'absolute';
-				elem.style.left = 0 + 'px';
-				elem.style.top = index * 25 + 'px';
-				card.position = this.targetStack ?? card.position;
+				card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
 			});
 
 			this.cardObjects = this.cardObjects.map((card) => {
 				const updatedCard = this.selectedCards.find((c) => c.id === card.id);
-				return updatedCard ? {...card, position: updatedCard.position} : card;
-			});
+				return updatedCard ? updatedCard : card;
+			}).sort((a, b) => b.position - a.position);
 		},
 		moveCard(card, index, clientX, clientY) {
 			const elem = document.getElementById('card-' + card.id);
@@ -400,10 +439,10 @@ export default {
 			elem.style.zIndex = 999;
 		},
 		orderByValue(stack) {
-			return stack.slice().sort((a, b) => b.position - a.position);
+			return stack.slice().sort((a, b) => parseInt(a.position.split("r")[1]) - parseInt(b.position.split("r")[1]));
 		},
 		orderByValueDESC(stack) {
-			return stack.slice().sort((a, b) => a.position - b.position);
+			return stack.slice().sort((a, b) => parseInt(b.position.split("r")[1]) - parseInt(a.position.split("r")[1]));
 		},
 	},
 }
