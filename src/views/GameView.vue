@@ -265,14 +265,17 @@ export default {
 			targetStack: null,
 		}
 	},
-	beforeCreate() {
+	beforeMount() {
+		localStorage.SessionID = 0;
+		const headerObj = {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+			"Authorization": `Bearer ${localStorage.BearerToken}`,
+		}
+
 		const getSession = {
 			method: 'GET',
-			headers: {
-				"Content-Type": "application/json",
-				"Accept": "*/*",
-				"Authorization": `Bearer ${localStorage.BearerToken}`,
-			}
+			headers: headerObj
 		};
 		fetch(config.api.url + '/Session/get', getSession).then(async response => {
 			const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -282,25 +285,40 @@ export default {
 				localStorage.SessionID = parseInt(data.id);
 			}
 
-			// check for error response
 			if (!response.ok) {
 				localStorage.SessionID = 0;
-				// get error message from body or default to response status
 				const error = (data && data.message) || response.status;
 				return Promise.reject(error);
 			}
 		}).catch(error => {
 			console.error("There was an error!", error);
+		}).then(() => {
+			if (parseInt(localStorage.SessionID) === 0) {
+				const postSession = {
+					method: 'POST',
+					headers: headerObj
+				};
+				fetch(config.api.url + '/Session/create', postSession).then(async response => {
+					const isJson = response.headers.get('content-type')?.includes('application/json');
+					const data = isJson && await response.json();
+
+					if (data) {
+						localStorage.SessionID = parseInt(data.id);
+					}
+				}).catch(error => {
+					console.error("There was an error!", error);
+				}).then(() => {
+					callGameInit(this);
+				});
+			} else if (parseInt(localStorage.SessionID) !== 0) {
+				callGameInit(this);
+			}
 		});
 
-		if (localStorage.SessionID && localStorage.SessionID !== 0) {
+		function callGameInit(obj) {
 			const initGame = {
 				method: 'POST',
-				headers: {
-					"Content-Type": "application/json",
-					"Accept": "*/*",
-					"Authorization": `Bearer ${localStorage.BearerToken}`,
-				},
+				headers: headerObj,
 				body: JSON.stringify({
 					solitaireSessionId: localStorage.SessionID
 				})
@@ -310,7 +328,7 @@ export default {
 				const isJson = response.headers.get('content-type')?.includes('application/json');
 				const data = isJson && await response.json();
 				if (response.ok) {
-					this.cardObjects = data;
+					obj.cardObjects = data;
 				}
 
 				// check for error response
@@ -320,12 +338,12 @@ export default {
 					return Promise.reject(error);
 				}
 			}).then(() => {
-				if (this.cardObjects.length === 0) {
+				if (obj.cardObjects.length === 0) {
 					fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
 						const isJson = response.headers.get('content-type')?.includes('application/json');
 						const data = isJson && await response.json();
 						if (response.ok) {
-							this.cardObjects = data;
+							obj.cardObjects = data;
 						}
 
 						// check for error response
@@ -448,6 +466,8 @@ export default {
 				}
 				body = JSON.stringify(cards);
 			}
+
+			console.log(body)
 
 			const moveCard = {
 				method: 'POST',
