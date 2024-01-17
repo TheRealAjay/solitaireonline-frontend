@@ -9,10 +9,19 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--d"
 				 data-position="d">
 				<div class="drag-el"
+					 @drag.prevent
+					 @dragstart.prevent
+					 @dragend.prevent
+					 @dragover.prevent
+					 @dragenter.prevent
+					 @click="resetDrawDeck">
+					Peepee poopoo
+				</div>
+				<div class="drag-el"
 					 v-for="(item, index) in stackZero"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 0 + 'px'}"
+					 :style="{top: 0 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -20,19 +29,28 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
-					 onclick="startDrag($event, item, index, stackZero)">
-					<PlayingCard :type="item.type" :value="item.value" :flipped="false" id="" stack="" />
+					 @click="clickedCard($event, item)">
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--df"
 				 data-position="df">
 				<div class="drag-el"
+					 v-for="(item, index) in stackOne"
+					 :id="'card-' + item.id"
+					 :key="item.id"
+					 :style="{left: ((index % 3 === 0) ? 0 : (index % 3 === 1) ? 25 : 50) + 'px'}"
+					 :data-card-index="index"
+					 :data-card-pos="item.position"
 					 @drag.prevent
 					 @dragstart.prevent
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @mousedown="startDrag($event, item, index, stackOne)">
+					<PlayingCard :card-pos="index" :type="item.type" :value="item.value" :flipped="item.flipped" id=""
+								 stack="" />
 				</div>
 			</div>
 			<div class="gameView__playArea__drawDeck__holder gameView__playArea__drawDeck__holder--c1"
@@ -243,11 +261,10 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id=""
 								 stack="" />
 				</div>
-			</div>			
+			</div>
 			<div class="gameView__playArea__buttons">
-				<button class="gameView__playArea__buttons__button">Test</button>
-				<button class="gameView__playArea__buttons__button">ABC</button>
-				<button class="gameView__playArea__buttons__button">123</button>
+				<button @click="restartGame()" class="gameView__playArea__buttons__button">Restart</button>
+				<button class="gameView__playArea__buttons__button">Back</button>
 			</div>
 		</div>
 	</div>
@@ -277,7 +294,6 @@ export default {
 			"Accept": "*/*",
 			"Authorization": `Bearer ${localStorage.BearerToken}`,
 		}
-
 		const getSession = {
 			method: 'GET',
 			headers: headerObj
@@ -285,11 +301,9 @@ export default {
 		fetch(config.api.url + '/Session/get', getSession).then(async response => {
 			const isJson = response.headers.get('content-type')?.includes('application/json');
 			const data = isJson && await response.json();
-
 			if (response.ok) {
 				localStorage.SessionID = parseInt(data.id);
 			}
-
 			if (!response.ok) {
 				localStorage.SessionID = 0;
 				const error = (data && data.message) || response.status;
@@ -365,59 +379,137 @@ export default {
 	name: "GameView",
 	computed: {
 		stackZero() {
-			const filteredStackZero = this.cardObjects.filter((item) => item.position.startsWith("d"))
-			return this.orderByValue(filteredStackZero)
+			return this.orderByDrawStack(this.cardObjects.filter((item) => item.position.startsWith("d") && item.flipped === false))
+		},
+		stackOne() {
+			return this.orderByDrawStackDESC(this.cardObjects.filter((item) => item.position.startsWith("d") && item.flipped === true))
 		},
 		stackTwo() {
-			const filteredStackTwo = this.cardObjects.filter((item) => item.position.startsWith("c1"))
-			return this.orderByValue(filteredStackTwo)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c1")))
 		},
 		stackThree() {
-			const filteredStackThree = this.cardObjects.filter((item) => item.position.startsWith("c2"))
-			return this.orderByValue(filteredStackThree)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c2")))
 		},
 		stackFour() {
-			const filteredStackFour = this.cardObjects.filter((item) => item.position.startsWith("c3"))
-			return this.orderByValue(filteredStackFour)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c3")))
 		},
 		stackFive() {
-			const filteredStackFive = this.cardObjects.filter((item) => item.position.startsWith("c4"))
-			return this.orderByValue(filteredStackFive)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c4")))
 		},
 		stackSix() {
-			const filteredStackSix = this.cardObjects.filter((item) => item.position.startsWith("c5"))
-			return this.orderByValue(filteredStackSix)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c5")))
 		},
 		stackSeven() {
-			const filteredStackSeven = this.cardObjects.filter((item) => item.position.startsWith("c6"))
-			return this.orderByValue(filteredStackSeven)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c6")))
 		},
 		stackEight() {
-			const filteredStackEight = this.cardObjects.filter((item) => item.position.startsWith("c7"))
-			return this.orderByValue(filteredStackEight)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("c7")))
 		},
 		stackNine() {
-			const filteredStackNine = this.cardObjects.filter((item) => item.position.startsWith("b1"))
-			return this.orderByValueDESC(filteredStackNine)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("b1")))
 		},
 		stackTen() {
-			const filteredStackTen = this.cardObjects.filter((item) => item.position.startsWith("b2"))
-			return this.orderByValueDESC(filteredStackTen)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("b2")))
 		},
 		stackEleven() {
-			const filteredStackEleven = this.cardObjects.filter((item) => item.position.startsWith("b3"))
-			return this.orderByValueDESC(filteredStackEleven)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("b3")))
 		},
 		stackTwelve() {
-			const filteredStackTwelve = this.cardObjects.filter((item) => item.position.startsWith("b4"))
-			return this.orderByValueDESC(filteredStackTwelve)
+			return this.orderByValue(this.cardObjects.filter((item) => item.position.startsWith("b4")))
 		},
 	},
 	methods: {
+		goBack(){
+
+		},
+		restartGame() {
+			const stopSessBody = {
+				solitaireSessionId: localStorage.SessionID
+			}
+			const stopSessReq = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				},
+				body: JSON.stringify(stopSessBody)
+			}
+			const createSessReq = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				}
+			}
+			fetch(config.api.url + '/Session/end', stopSessReq)
+				.then(async response => {
+					if (response.ok) {
+						fetch(config.api.url + '/Session/create', createSessReq)
+							.then(async response => {
+								this.$router.go();
+							});
+					}
+				});
+		},
+		resetDrawDeck() {
+			const flipCardRequests = [];
+			this.cardObjects = this.cardObjects.map((card) => {
+				if (card.position.startsWith("d") && card.flipped === true) {
+					flipCardRequests.push({
+						position: card.position,
+						solitaireSessionId: localStorage.SessionID
+					})
+					card.flipped = false;
+				}
+				return card;
+			});
+			const flipCardReq = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				},
+				body: JSON.stringify(flipCardRequests)
+			}
+			fetch(config.api.url + "/Game/flipMore", flipCardReq);
+		},
+		clickedCard(e, item) {
+			const flipReqBody = {
+				position: item.position,
+				solitaireSessionId: localStorage.SessionID
+			}
+			const flipCardReq = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+					"Authorization": `Bearer ${localStorage.BearerToken}`,
+				},
+				body: JSON.stringify(flipReqBody)
+			}
+			fetch(config.api.url + "/Game/flip", flipCardReq).then(async response => {
+				const isJson = response.headers.get('content-type')?.includes('application/json');
+				const data = isJson && await response.json();
+				if (data) {
+					let flipCard = this.cardObjects.find(c => c.position === item.position);
+					this.cardObjects = this.cardObjects.map((card) => {
+						if (card.id === flipCard.id) {
+							card.flipped = true;
+						}
+						return card;
+					});
+				}
+			});
+		},
 		startDrag(evt, item, index, stack) {
 			this.selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
-			document.addEventListener("mousemove", this.onDrag);
-			document.addEventListener("mouseup", this.endDrag);
+			if (!this.selectedCards.find(card => card.flipped === false)) {
+				document.addEventListener("mousemove", this.onDrag);
+				document.addEventListener("mouseup", this.endDrag);
+			}
 		},
 		onDrag(e) {
 			let {clientX, clientY} = e;
@@ -513,9 +605,10 @@ export default {
 							body: JSON.stringify(flipReqBody)
 						}
 						fetch(config.api.url + "/Game/flip", flipCardReq).then(async response => {
+							const isJson = response.headers.get('content-type')?.includes('application/json');
 							const data = isJson && await response.json();
 							if (data) {
-								let flipCard = this.cardObjects.find((card) => card.position === beforeCardPos);
+								let flipCard = this.cardObjects.find(c => c.position === beforeCardPos);
 								this.cardObjects = this.cardObjects.map((card) => {
 									if (card.id === flipCard.id) {
 										card.flipped = true;
@@ -562,8 +655,11 @@ export default {
 		orderByValue(stack) {
 			return stack.slice().sort((a, b) => parseInt(a.position.split("r")[1]) - parseInt(b.position.split("r")[1]));
 		},
-		orderByValueDESC(stack) {
-			return stack.slice().sort((a, b) => parseInt(b.position.split("r")[1]) - parseInt(a.position.split("r")[1]));
+		orderByDrawStack(stack) {
+			return stack.slice().sort((a, b) => parseInt(a.position.split("d")[1]) - parseInt(b.position.split("d")[1]));
+		},
+		orderByDrawStackDESC(stack) {
+			return stack.slice().sort((b, a) => parseInt(a.position.split("d")[1]) - parseInt(b.position.split("d")[1]));
 		},
 	},
 }
