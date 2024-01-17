@@ -186,24 +186,63 @@ a, .green {
 
 	&__drawDeck {
 	  &__holder {
-		left             : 5%;
-		top              : 10%;
-		position         : absolute;
-		width            : 150px;
-		height     : 200px;
-		background-color : transparent;
-		border-radius    : 21px;
-		border           : 3px solid #ebebeb50;
-		overflow-y		 : visible;
-		scrollbar-width	 : none; /* Hide the scrollbar in Firefox */
-		-ms-overflow-style: none; /* Hide the scrollbar in Internet Explorer/Edge */
-		&--right{
-			left: unset;
-			right: 5%;
+		left               : 5%;
+		top                : 5%;
+		position           : absolute;
+		width              : 90px;
+		height             : 120px;
+		background-color   : transparent;
+		border-radius      : 10px;
+		border             : 1px solid #ebebeb50;
+		overflow-y         : visible;
+		scrollbar-width    : none; /* Hide the scrollbar in Firefox */
+		-ms-overflow-style : none; /* Hide the scrollbar in Internet Explorer/Edge */
+		&--df{
+			left: 17%;
+		}
+		&--c1 {
+		  top: 30%;
+		}
+		&--c2 {
+			top: 30%;
+			left: 17%;
+		}
+		&--c3 {
+			top: 30%;
+			left: 31%;
+		}
+		&--c4 {
+			top: 30%;
+			left: 45%;
+		}
+		&--c5 {
+			top: 30%;
+			left: 59%;
+		}
+		&--c6 {
+			top: 30%;
+			left: 73%;
+		}
+		&--c7 {
+			top: 30%;
+			left: 87%;
+		}
+		&--b1 {
+			left: 45%;
+		}
+		&--b2 {
+			left: 59%;
+		}
+		&--b3 {
+			left: 73%;
+		}
+		&--b4 {
+			left: 87%;
 		}
 	  }
+
 	  &__holder::-webkit-scrollbar {
-		display: none; /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
+		display : none; /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
 	  }
 	}
   }
@@ -216,7 +255,7 @@ a, .green {
   transform       : rotateY(180deg);
   transition      : all 0.3s ease-out;
   transform-style : preserve-3d;
-  border-radius   : 20px;
+  border-radius   : 10px;
 
   &__front, &__back {
 	position                    : absolute;
@@ -226,7 +265,7 @@ a, .green {
 	backface-visibility         : hidden;
 	background-size             : cover;
 	background-position         : center center;
-	border-radius               : 20px;
+	border-radius               : 10px;
 	border                      : 3px solid #1c1b22;
   }
 
