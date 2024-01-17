@@ -428,6 +428,27 @@ export default {
 				return;
 			}
 
+			let body = '';
+			if (this.selectedCards.length <= 1) {
+				body = JSON.stringify({
+					fromPosition: fromPosition,
+					toPosition: this.targetStack + "r" + (targetStackNode.childElementCount + 1),
+					solitaireSessionId: localStorage.SessionID
+				});
+			} else {
+				let cards = [];
+				let i = 1;
+				for (const card of this.selectedCards) {
+					cards.push({
+						fromPosition: card.position,
+						toPosition: this.targetStack + "r" + (targetStackNode.childElementCount + i),
+						solitaireSessionId: localStorage.SessionID
+					})
+					i++;
+				}
+				body = JSON.stringify(cards);
+			}
+
 			const moveCard = {
 				method: 'POST',
 				headers: {
@@ -435,11 +456,7 @@ export default {
 					"Accept": "*/*",
 					"Authorization": `Bearer ${localStorage.BearerToken}`,
 				},
-				body: JSON.stringify({
-					fromPosition: fromPosition,
-					toPosition: this.targetStack + "r" + (targetStackNode.childElementCount + 1),
-					solitaireSessionId: localStorage.SessionID
-				})
+				body: body
 			};
 
 			const reqURL = this.selectedCards.length > 1 ? '/Game/moveMore' : '/Game/move';
@@ -453,7 +470,6 @@ export default {
 						this.selectedCards.forEach((card, index) => {
 							card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
 						});
-
 						this.cardObjects = this.cardObjects.map((card) => {
 							const updatedCard = this.selectedCards.find((c) => c.id === card.id);
 							return updatedCard ? updatedCard : card;
