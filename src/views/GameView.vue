@@ -20,7 +20,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 @dragend.prevent
 					 @dragover.prevent
 					 @dragenter.prevent
-					 @mousedown="startDrag($event, item, index, stackZero)">
+					 onclick="startDrag($event, item, index, stackZero)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="false" id="" stack="" />
 				</div>
 			</div>
@@ -243,6 +243,11 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id=""
 								 stack="" />
 				</div>
+			</div>			
+			<div class="gameView__playArea__buttons">
+				<button class="gameView__playArea__buttons__button">Test</button>
+				<button class="gameView__playArea__buttons__button">ABC</button>
+				<button class="gameView__playArea__buttons__button">123</button>
 			</div>
 		</div>
 	</div>

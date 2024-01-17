@@ -184,6 +184,28 @@ a, .green {
 	border-radius : 20px;
 	position      : relative;
 
+	&__buttons{
+		left: 0%;
+		bottom: 0%;
+		position: absolute;
+		padding: 10px;
+		width: 25%;
+		height: 10%;
+
+			&__button{
+				background-color: lightgray;
+				width: 30%;
+				height: 80%;
+				border-radius: 10px;
+				border: 1px solid black;
+				margin: 1px;
+			}
+			
+			:hover {
+				background-color: white;
+			}
+	}
+
 	&__drawDeck {
 	  &__holder {
 		left               : 5%;
