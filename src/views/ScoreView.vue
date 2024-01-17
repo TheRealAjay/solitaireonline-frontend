@@ -1,20 +1,47 @@
 <template>
-    <h2 class="score-heading">Scores von {{ player }}</h2>
-    <div class="score-chart">
-        <Scatter v-if="!isLoading" :data="data" :options="options" />
+    <div class="score__page">
+        <h2 class="score__page__heading">Scores von {{ player }}</h2>
+        <div class="score__page__chart">
+            <div class="score__page__chart__bar">
+                <Bar
+                    v-if="!isLoading"
+                    :data="dataScore"
+                    :options="optionsScore"
+                />
+            </div>
+            <div class="score__page__chart__bar score__page__chart__time">
+                <Bar
+                    v-if="!isLoading"
+                    :data="dataTime"
+                    :options="optionsTime"
+                />
+            </div>
+        </div>
     </div>
 </template>
 
 <style>
-.score-heading {
+.score__page {
+    padding: 0 20px;
+}
+
+.score__page__heading {
     display: flex;
     justify-content: center;
     padding-top: 25px;
 }
 
-.score-chart {
+.score__page__chart {
     margin: auto auto;
     height: 80vh;
+}
+
+.score__page__chart__bar {
+    height: calc(40vh - 10px);
+}
+
+.score__page__chart__time {
+    margin-top: 20px;
 }
 </style>
 
@@ -24,71 +51,69 @@ import "chartjs-adapter-moment";
 import {
     Chart as ChartJS,
     LinearScale,
-    PointElement,
-    LineElement,
     Tooltip,
     Legend,
     TimeScale,
+    CategoryScale,
+    BarElement,
 } from "chart.js";
 import { Scatter } from "vue-chartjs";
+import { Bar } from "vue-chartjs";
 
 ChartJS.register(
     LinearScale,
-    PointElement,
-    LineElement,
     Tooltip,
     Legend,
-    TimeScale
+    TimeScale,
+    CategoryScale,
+    BarElement
 );
 
-const data = {
+const dataScore = {
+    labels: null,
     datasets: [
         {
-            label: "Scores",
-            fill: false,
-            pointRadius: 4,
-            borderColor: "#00bd7e",
-            backgroundColor: "#00bd7e",
+            label: "Punkte",
+            backgroundColor: [],
             data: null,
         },
     ],
 };
 
-const options = {
+const dataTime = {
+    labels: null,
+    datasets: [
+        {
+            label: "Zeit",
+            backgroundColor: [],
+            data: null,
+        },
+    ],
+};
+
+const optionsScore = {
+    type: "bar",
     responsive: true,
     maintainAspectRatio: false,
-    scales: {
-        x: {
-            beginAtZero: true,
-            title: {
-                display: true,
-                text: "Zeit [Minuten]",
-                color: "#aaa",
-            },
-            ticks: {
-                color: "#aaa",
-                callback: function (val) {
-                    let value = this.getLabelForValue(val);
-                    return value + " min";
-                },
-            },
-            grid: {
-                color: "#555",
+    data: dataScore,
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
             },
         },
+    },
+};
 
-        y: {
-            title: {
-                display: true,
-                text: "Punkte",
-                color: "#aaa",
-            },
-            beginAtZero: true,
-            ticks: {
-                color: "#aaa",
-            },
-            grid: {
-                color: "#555",
+const optionsTime = {
+    type: "bar",
+    data: dataTime,
+    responsive: true,
+    maintainAspectRatio: false,
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
             },
         },
     },
@@ -99,17 +124,15 @@ const options = {
                 label: function (context) {
                     let time = "Zeit: ";
                     if (context.parsed.x !== null) {
-                        let xTime = context.parsed.x;
+                        let xTime = context.parsed.y;
                         let seconds = (xTime % Math.floor(xTime)) * 60;
                         time += `${parseInt(xTime / 60)}:`;
                         xTime %= 60;
-                        time += `${
-                            xTime - (xTime % Math.floor(xTime))
-                        }:${seconds}`;
-
-                        return time + ` Score: ${context.parsed.y}`;
+                        time += `${xTime - (xTime % Math.floor(xTime))}:${
+                            Math.round(seconds * 100) / 100
+                        }`;
                     }
-                    return label;
+                    return time;
                 },
             },
         },
@@ -119,8 +142,10 @@ const options = {
 export default {
     data() {
         return {
-            data: data,
-            options: options,
+            dataScore: dataScore,
+            dataTime: dataTime,
+            optionsScore: optionsScore,
+            optionsTime: optionsTime,
             player: "",
             isLoading: true,
             max: 10,
@@ -129,7 +154,7 @@ export default {
 
     name: "App",
     components: {
-        Scatter,
+        Bar,
     },
 
     methods: {
@@ -149,19 +174,22 @@ export default {
 
         parseScore() {
             if (this.scores != null && this.scores.length > 0) {
-                data.datasets[0].data = [];
+                dataScore.datasets[0].data = [];
+                dataScore.labels = [];
+                dataTime.datasets[0].data = [];
+                dataTime.labels = [];
                 for (let i = 0; i < this.scores.length; i++) {
                     if (this.max < this.scores[i].scoreCount) {
                         this.max = this.scores[i].scoreCount;
                     }
 
-                    data.datasets[0].data.push({
-                        x: this.scores[i].minutes,
-                        y: this.scores[i].scoreCount,
-                    });
+                    dataScore.labels.push("Spiel " + (i + 1));
+                    dataScore.datasets[0].data.push(this.scores[i].scoreCount);
+                    dataScore.datasets[0].backgroundColor.push("#00bd7e");
+                    dataTime.labels.push("Spiel " + (i + 1));
+                    dataTime.datasets[0].data.push(this.scores[i].minutes);
+                    dataTime.datasets[0].backgroundColor.push("#00bd7e");
                 }
-
-                options.scales.y.max = parseInt(this.max * 1.15);
             }
         },
     },
