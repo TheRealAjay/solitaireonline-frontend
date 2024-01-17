@@ -75,6 +75,7 @@ const dataScore = {
         {
             label: "Punkte",
             backgroundColor: [],
+            borderColor: [],
             data: null,
         },
     ],
@@ -86,6 +87,7 @@ const dataTime = {
         {
             label: "Zeit",
             backgroundColor: [],
+            borderColor: [],
             data: null,
         },
     ],
@@ -148,7 +150,6 @@ export default {
             optionsTime: optionsTime,
             player: "",
             isLoading: true,
-            max: 10,
         };
     },
 
@@ -179,16 +180,14 @@ export default {
                 dataTime.datasets[0].data = [];
                 dataTime.labels = [];
                 for (let i = 0; i < this.scores.length; i++) {
-                    if (this.max < this.scores[i].scoreCount) {
-                        this.max = this.scores[i].scoreCount;
-                    }
-
                     dataScore.labels.push("Spiel " + (i + 1));
                     dataScore.datasets[0].data.push(this.scores[i].scoreCount);
                     dataScore.datasets[0].backgroundColor.push("#00bd7e");
+                    dataScore.datasets[0].borderColor.push("#0f0");
                     dataTime.labels.push("Spiel " + (i + 1));
                     dataTime.datasets[0].data.push(this.scores[i].minutes);
-                    dataTime.datasets[0].backgroundColor.push("#00bd7e");
+                    dataTime.datasets[0].backgroundColor.push("#007dae");
+                    dataTime.datasets[0].borderColor.push("#00f");
                 }
             }
         },
