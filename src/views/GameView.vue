@@ -467,8 +467,6 @@ export default {
 				body = JSON.stringify(cards);
 			}
 
-			console.log(body)
-
 			const moveCard = {
 				method: 'POST',
 				headers: {
@@ -487,12 +485,39 @@ export default {
 
 				if (response.ok) {
 					if (data === true) {
+						let firstCardPos = this.selectedCards[0].position.split("r");
+						let beforeCardPos = firstCardPos[0] + "r" + (parseInt(firstCardPos[1]) - 1);
+						let flipReqBody = {
+							position: beforeCardPos,
+							solitaireSessionId: localStorage.SessionID
+						}
 						this.selectedCards.forEach((card, index) => {
 							card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
 						});
 						this.cardObjects = this.cardObjects.map((card) => {
 							const updatedCard = this.selectedCards.find((c) => c.id === card.id);
 							return updatedCard ? updatedCard : card;
+						});
+						const flipCardReq = {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json",
+								"Accept": "*/*",
+								"Authorization": `Bearer ${localStorage.BearerToken}`,
+							},
+							body: JSON.stringify(flipReqBody)
+						}
+						fetch(config.api.url + "/Game/flip", flipCardReq).then(async response => {
+							const data = isJson && await response.json();
+							if (data) {
+								let flipCard = this.cardObjects.find((card) => card.position === beforeCardPos);
+								this.cardObjects = this.cardObjects.map((card) => {
+									if (card.id === flipCard.id) {
+										card.flipped = true;
+									}
+									return card;
+								});
+							}
 						});
 					} else {
 						this.selectedCards.forEach((card) => {
