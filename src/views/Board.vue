@@ -275,7 +275,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 			<div class="gameView__playArea__buttonDiv">
 				<div class="gameView__playArea__buttonDiv__buttons">
 					<button @click="restartGame()">Restart</button>
-					<button  @click="goBack()" >Back</button>
+					<button @click="goBack()">Back</button>
 				</div>
 			</div>
 		</div>
@@ -510,6 +510,7 @@ export default {
 		},
 		clickedCard(e, item) {
 			const flipReqBody = {
+				manualFlip: true,
 				position: item.position,
 				solitaireSessionId: localStorage.SessionID
 			}
@@ -618,6 +619,7 @@ export default {
 						let beforeCardPos = firstCardPos[0] + "r" + (parseInt(firstCardPos[1]) - 1);
 						let flipReqBody = {
 							position: beforeCardPos,
+							manualFlip: false,
 							solitaireSessionId: localStorage.SessionID
 						}
 						this.selectedCards.forEach((card, index) => {
