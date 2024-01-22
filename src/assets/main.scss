@@ -152,13 +152,13 @@ a, .green {
 	  -moz-box-shadow    : 10px 9px 34px -11px rgba(125, 125, 125, 0.75);
 	  min-height         : 120px;
 	  display            : flex;
+	  flex-direction     : column;
 	  justify-content    : center;
 	  align-items        : center;
 	  padding            : 15px;
 	  position           : relative;
 
 	  &__icon {
-		position        : absolute;
 		display         : flex;
 		width           : 100%;
 		justify-content : center;
@@ -166,7 +166,164 @@ a, .green {
 	  }
 
 	  &__text {
+		text-align  : center;
 		padding-top : 25px;
+	  }
+	}
+
+
+	$color-success   : #2dce89;
+	$color-success_2 : #2dcecc;
+	$color-error     : #f5365c;
+	$color-error_2   : #f56036;
+	$color-primary_2 : #11cdef;
+	$color-primary   : #1171ef;
+
+
+	$loader-size     : 4em;
+	$check-height    : $loader-size/2.5;
+	$check-width     : $check-height/2;
+	$check-left      : ($loader-size/2 - $loader-size/3);
+	$check-thickness : 5px;
+	$cross-left      : ($loader-size/2 - $loader-size/12);
+	$cross-top       : ($loader-size/2 - $loader-size/12);
+
+	.circle-loader {
+	  border            : 5px solid rgba(0, 0, 0, 0.2);
+	  border-left-color : $color-primary;
+	  animation         : loader-spin 1.2s infinite linear;
+	  position          : relative;
+	  display           : inline-block;
+	  vertical-align    : top;
+	  border-radius     : 50%;
+	  width             : $loader-size;
+	  height            : $loader-size;
+
+	  &.load-complete {
+		-webkit-animation : none;
+		animation         : none;
+		transition        : border 500ms ease-out;
+
+		&.load-success {
+		  border-color : $color-success;
+		}
+
+		&.load-fail {
+		  border-color : $color-error;
+		}
+	  }
+
+	  .checkmark, .crossmark {
+		display : none;
+	  }
+
+
+	  .checkmark {
+		&.draw:after {
+		  animation-duration        : 800ms;
+		  animation-timing-function : ease;
+		  animation-name            : checkmark;
+		  transform                 : scaleX(-1) rotate(135deg) translateX(-50%) translateY(-50%);
+		}
+
+		&:after {
+		  opacity          : 1;
+		  height           : $check-height;
+		  width            : $check-width;
+		  transform-origin : left top;
+		  border-right     : $check-thickness solid $color-success;
+		  border-top       : $check-thickness solid $color-success;
+		  content          : '';
+		  left             : 50%;
+		  top              : 50%;
+		  position         : absolute;
+		}
+	  }
+
+
+	  .crossmark {
+
+		&.draw:after, &.draw:before {
+		  animation-duration        : 800ms;
+		  animation-timing-function : ease;
+		  animation-name            : crossmark;
+		}
+
+		&:before, &:after {
+		  opacity    : 1;
+		  content    : '';
+		  top        : 50%;
+		  left       : 50%;
+		  position   : absolute;
+		  background : $color-error;
+		  width      : $check-thickness;
+		  height     : $check-height;
+		}
+
+		&:before {
+		  transform : translate(-50%, -50%) rotate(45deg);
+		}
+
+		&:after {
+		  transform : translate(-50%, -50%) rotate(-45deg);
+		}
+
+	  }
+	}
+
+	@keyframes loader-spin {
+	  0% {
+		transform : rotate(0deg);
+	  }
+	  100% {
+		transform : rotate(360deg);
+	  }
+	}
+
+	@keyframes checkmark {
+	  0% {
+		height  : 0;
+		width   : 0;
+		opacity : 1;
+	  }
+	  20% {
+		height  : 0;
+		width   : $check-width;
+		opacity : 1;
+	  }
+	  40% {
+		height  : $check-height;
+		width   : $check-width;
+		opacity : 1;
+	  }
+	  100% {
+		height  : $check-height;
+		width   : $check-width;
+		opacity : 1;
+	  }
+	}
+
+
+	@keyframes crossmark {
+	  0% {
+		height  : 0;
+		width   : 0;
+		opacity : 1;
+	  }
+	  20% {
+		height  : 0;
+		width   : $check-thickness;
+		opacity : 1;
+	  }
+	  40% {
+		height  : $check-height;
+		width   : $check-thickness;
+		opacity : 1;
+	  }
+	  100% {
+		width   : $check-thickness;
+		height  : $check-height;
+		opacity : 1;
 	  }
 	}
   }

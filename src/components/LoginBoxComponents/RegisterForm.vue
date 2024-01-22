@@ -22,6 +22,8 @@ const onSubmit = async (e) => {
 		return;
 	}
 
+	document.getElementById('login__box__popup').style.display = 'flex';
+
 	const requestOptions = {
 		method: 'POST',
 		headers: {
@@ -41,8 +43,10 @@ const onSubmit = async (e) => {
 			const data = isJson && await response.json();
 
 			if (response.ok) {
+				document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-success');
+				document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'block';
+				document.getElementById('login__box__popup__holder__text').innerText = 'Registrierung war erfolgreich, Sie werden in Kürze weitergeleitet.';
 				localStorage.clear();
-				document.getElementById('login__box__popup').style.display = 'flex';
 				setTimeout(() => {
 					window.location.replace("/");
 				}, 2500)
@@ -53,6 +57,21 @@ const onSubmit = async (e) => {
 				localStorage.clear();
 				// get error message from body or default to response status
 				const error = (data && data.message) || response.status;
+
+				document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-fail');
+				document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'block';
+				if (response.status === 409) {
+					document.getElementById('login__box__popup__holder__text').innerText = 'Benutzername ist bereits vergeben.';
+				} else {
+					document.getElementById('login__box__popup__holder__text').innerText = 'Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.';
+				}
+				setTimeout(() => {
+
+					document.getElementById('login__box__popup__holder__icon__circle-loader').classList.remove('load-complete', 'load-success', 'load-fail');
+					document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'none';
+					document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'none';
+					document.getElementById('login__box__popup').style.display = 'none';
+				}, 2500)
 				return Promise.reject(error);
 			}
 		})
@@ -88,12 +107,14 @@ const onSubmit = async (e) => {
 	</form>
 	<div id="login__box__popup" class="login__box__popup" style="display: none">
 		<div class="login__box__popup__holder">
-			<div class="login__box__popup__holder__icon">
-				💀
+			<div id="login__box__popup__holder__icon" class="login__box__popup__holder__icon">
+				<div id="login__box__popup__holder__icon__circle-loader" class="circle-loader">
+					<div id="login__box__popup__holder__icon__checkmark" class="checkmark draw"></div>
+					<div id="login__box__popup__holder__icon__crossmark" class="crossmark draw"></div>
+				</div>
 			</div>
-			<div class="login__box__popup__holder__text">
-				What the fuck did you say about me you little shit, I'll have you know I graduated at the top of my
-				class in the Navy Seals.
+			<div id="login__box__popup__holder__text" class="login__box__popup__holder__text">
+
 			</div>
 		</div>
 	</div>
@@ -119,7 +140,6 @@ export default {
 		checkPasswordValidation(event) {
 			let password = event.target.form.elements['password'].value;
 			let regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/;
-			console.log(password)
 			if (!regex.test(password)) {
 				document.getElementById('password__error').innerText = 'Passwort muss mind. 6 Zeichen Lang sein und mind. einen Großbuchstaben, Zahl und Sonderzeichen beinhalten';
 			} else if (regex.test(password)) {
