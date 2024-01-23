@@ -88,7 +88,23 @@ import '../assets/circular_nav.css'
 					 @dragover.prevent
 					 @dragenter.prevent
 					 @click="resetDrawDeck">
-					Peepee poopoo
+					<div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%">
+						<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+							   stroke="#CCCCCC"
+							   stroke-width="0.9120000000000001"></g>
+							<g id="SVGRepo_iconCarrier">
+								<path
+									d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
+									stroke="#FFFFFF" stroke-width="0.5"></path>
+								<path
+									d="M15.9775 8.71452L15.5355 8.2621C13.5829 6.26318 10.4171 6.26318 8.46447 8.2621C6.51184 10.261 6.51184 13.5019 8.46447 15.5008C10.4171 17.4997 13.5829 17.4997 15.5355 15.5008C16.671 14.3384 17.1462 12.7559 16.9611 11.242M15.9775 8.71452H13.3258M15.9775 8.71452V6"
+									stroke="#FFFFFF" stroke-width="0.5" stroke-linecap="round"
+									stroke-linejoin="round"></path>
+							</g>
+						</svg>
+					</div>
 				</div>
 				<div class="drag-el"
 					 v-for="(item, index) in stackZero"
@@ -113,7 +129,6 @@ import '../assets/circular_nav.css'
 					 v-for="(item, index) in stackOne"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{left: ((index % 3 === 0) ? 0 : (index % 3 === 1) ? 25 : 50) + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -563,6 +578,15 @@ export default {
 		},
 		startDrag(evt, item, index, stack) {
 			this.selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
+			this.selectedCards.forEach((cardItem, indexItem) => {
+				const cardElement = document.getElementById('card-' + cardItem.id);
+				cardElement.style.left = evt.clientX - (cardElement.children[0].getBoundingClientRect().width / 2) + 'px';
+				cardElement.style.top = evt.clientY - (cardElement.children[0].getBoundingClientRect().height / 2) + indexItem * 45 + 'px';
+				cardElement.style.position = 'fixed';
+				cardElement.style.width = cardElement.children[0].getBoundingClientRect().width + 'px';
+				cardElement.style.height = cardElement.children[0].getBoundingClientRect().height + 'px';
+				cardElement.style.zIndex = 999;
+			});
 			if (!this.selectedCards.find(card => card.flipped === false)) {
 				document.addEventListener("mousemove", this.onDrag);
 				document.addEventListener("mouseup", this.endDrag);
@@ -694,18 +718,22 @@ export default {
 		},
 		moveCard(card, index, clientX, clientY) {
 			const elem = document.getElementById('card-' + card.id);
-			elem.style.position = 'fixed';
-			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
+			// console.log('moveCard w', elem.getBoundingClientRect().width)
+			// console.log('moveCard h', elem.getBoundingClientRect().height)
 			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
-			elem.style.width = 90 + 'px';
-			elem.style.height = 120 + 'px';
+			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
+			elem.style.position = 'fixed';
 			elem.style.zIndex = 999;
 		},
 		resetCardPos(card, index) {
 			const elem = document.getElementById('card-' + card.id);
 			elem.style.position = null;
 			elem.style.left = null;
-			elem.style.top = index * 45 + 'px';
+			if (elem.dataset.cardPos.startsWith("c")) {
+				elem.style.top = index * 45 + 'px';
+			} else {
+				elem.style.top = null;
+			}
 			elem.style.width = null;
 			elem.style.height = null;
 			elem.style.zIndex = null;
@@ -779,17 +807,4 @@ export default {
 	height      : 100%;
 	align-items : center;
 }
-
-.navigation {
-	position : absolute;
-	top      : 0;
-	left     : 0;
-	bottom   : 0;
-	right    : 0;
-	margin   : auto;
-	width    : 100%;
-	height   : 100%;
-}
-
-
 </style>

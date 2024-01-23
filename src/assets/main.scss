@@ -490,6 +490,10 @@ a, .green {
 		scrollbar-width    : none; /* Hide the scrollbar in Firefox */
 		-ms-overflow-style : none; /* Hide the scrollbar in Internet Explorer/Edge */
 
+		&--d {
+		  aspect-ratio : 90/120;
+		}
+
 		&--df {
 		  left         : 17%;
 		  aspect-ratio : 90/120;
