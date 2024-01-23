@@ -1,27 +1,70 @@
 <script setup>
 import background_image from "../assets/background.png";
 import PlayingCard from "@/components/Card/PlayingCard.vue";
+import '../assets/circular_nav.css'
 </script>
 
 <template>
 	<div class="navigation">
-		<div class="FABMenu">
-			<input type="checkbox" checked />
-			<div class="hamburger">
-				<div class="dots">
-					<span class="first"></span>
-					<span class="second"></span>
-					<span class="third"></span>
-				</div>
+		<div class="pie pie1" onclick="document.body.classList.remove('active')">
+			<div class="pie-color pie-color1" @click="restartGame()">
+				<svg class="reset" height="90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+					<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
+					   stroke-width="0.9120000000000001"></g>
+					<g id="SVGRepo_iconCarrier">
+						<path
+							d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
+							stroke="#FFFFFF" stroke-width="1.5"></path>
+						<path
+							d="M15.9775 8.71452L15.5355 8.2621C13.5829 6.26318 10.4171 6.26318 8.46447 8.2621C6.51184 10.261 6.51184 13.5019 8.46447 15.5008C10.4171 17.4997 13.5829 17.4997 15.5355 15.5008C16.671 14.3384 17.1462 12.7559 16.9611 11.242M15.9775 8.71452H13.3258M15.9775 8.71452V6"
+							stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+					</g>
+				</svg>
 			</div>
-			<div class="action_items_bar">
-				<div class="action_items">
-					<span class="first_item"><i class="material-icons">favorite</i></span>
-					<span class="second_item"><i class="material-icons">chat</i></span>
-					<span class="third_item"><i class="material-icons">get_app</i></span>
-					<span class="fourth_item"><i class="material-icons">share</i></span>
-				</div>
+		</div>
+		<div class="pie pie2" @click="goBack()">
+			<div class="pie-color pie-color2">
+				<svg class="back" viewBox="0 0 24 24" height="90" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+					<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+					<g id="SVGRepo_iconCarrier">
+						<path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+							  stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+						<path
+							d="M9.00002 15.3802H13.92C15.62 15.3802 17 14.0002 17 12.3002C17 10.6002 15.62 9.22021 13.92 9.22021H7.15002"
+							stroke="#FFFFFF" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+							stroke-linejoin="round"></path>
+						<path d="M8.57 10.7701L7 9.19012L8.57 7.62012" stroke="#FFFFFF" stroke-width="1.5"
+							  stroke-linecap="round" stroke-linejoin="round"></path>
+					</g>
+				</svg>
 			</div>
+		</div>
+		<div class="pie pie3" @click="setWindow(3)">
+			<div class="pie-color pie-color3">
+				<svg fill="#FFFFFF" class="stats" height="100" version="1.1" id="Capa_1"
+					 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+					 viewBox="0 0 250.26 250.26" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+					<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+					<g id="SVGRepo_iconCarrier">
+						<path
+							d="M242.76,218.537h-39.518v-99.071c0-4.143-3.357-7.5-7.5-7.5h-39.557v-39.39c0-4.143-3.357-7.5-7.5-7.5h-47.061 c-4.143,0-7.5,3.357-7.5,7.5v54.07H54.557c-4.143,0-7.5,3.357-7.5,7.5v84.391H15V24.216c0-4.143-3.358-7.5-7.5-7.5 c-4.143,0-7.5,3.357-7.5,7.5v201.82c0,4.143,3.357,7.5,7.5,7.5h46.921c0.046,0.001,0.09,0.007,0.136,0.007h47.061 c0.002,0,0.002,0,0.004,0c0.002,0,0.002,0,0.004,0h47.061h47.057c0.046,0,0.09-0.006,0.136-0.007h46.882c4.143,0,7.5-3.357,7.5-7.5 C250.26,221.894,246.902,218.537,242.76,218.537z M188.242,126.965v91.571h-32.057v-91.571H188.242z M141.186,80.076v39.39v99.071 h-32.061V80.076H141.186z M62.057,141.646h32.061v76.891H62.057V141.646z">
+						</path>
+					</g>
+				</svg>
+			</div>
+		</div>
+		<div class="menu" onclick="document.body.classList.toggle('active')">
+			<svg class="hamburger" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+				<g fill="none" stroke="#000" stroke-width="7.999" stroke-linecap="round">
+					<path d="M 55,26.000284 L 24.056276,25.999716" />
+					<path d="M 24.056276,49.999716 L 75.943724,50.000284" />
+					<path d="M 45,73.999716 L 75.943724,74.000284" />
+					<path d="M 75.943724,26.000284 L 45,25.999716" />
+					<path d="M 24.056276,73.999716 L 55,74.000284" />
+				</g>
+			</svg>
 		</div>
 	</div>
 	<div class="gameView">
@@ -290,12 +333,6 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 @mousedown="startDrag($event, item, index, stackTwelve)">
 					<PlayingCard :type="item.type" :value="item.value" :flipped="item.flipped" id=""
 								 stack="" position="" />
-				</div>
-			</div>
-			<div class="gameView__playArea__buttonDiv">
-				<div class="gameView__playArea__buttonDiv__buttons">
-					<button @click="restartGame()">Restart</button>
-					<button @click="goBack()">Back</button>
 				</div>
 			</div>
 		</div>
@@ -752,148 +789,6 @@ export default {
 	margin   : auto;
 	width    : 100%;
 	height   : 100%;
-}
-
-.FABMenu {
-	position  : absolute;
-	top       : 25px;
-	left      : 50%;
-	transform : translateX(-50%);
-	z-index   : 999;
-	margin    : auto;
-	width     : 600px;
-	height    : 200px;
-}
-
-.FABMenu input {
-	position      : absolute;
-	top           : 0%;
-	left          : 50%;
-	transform     : translateX(-50%);
-	width         : 50px;
-	height        : 50px;
-	z-index       : 20;
-	border-radius : 50px;
-	opacity       : 0;
-	cursor        : pointer;
-}
-
-.hamburger {
-	position         : absolute;
-	top              : 0%;
-	left             : 50%;
-	transform        : translateX(-50%);
-	width            : 50px;
-	height           : 50px;
-	background-color : #e84f3e;
-	border-radius    : 100%;
-	box-shadow       : 0px 5px 20px rgba(0, 0, 0, 0.15);
-	z-index          : 10;
-	cursor           : pointer;
-}
-
-.dots span {
-	position      : absolute;
-	top           : 45%;
-	width         : 7px;
-	height        : 7px;
-	border-radius : 7px;
-	background    : #fff;
-	z-index       : 20;
-	transition    : all 0.3s ease-in-out;
-}
-
-.dots {
-	display         : flex;
-	justify-content : center;
-}
-
-.first {
-	margin-right : 20px;
-}
-
-.third {
-	margin-left : 20px;
-}
-
-.FABMenu input:checked ~ .hamburger .dots .first {
-	top              : 15px;
-	height           : 29px;
-	transform-origin : top;
-	transform        : rotate(-45deg);
-	transition       : all 0.3s ease-in-out;
-}
-
-.FABMenu input:checked ~ .hamburger .dots .third {
-	top              : 15px;
-	height           : 29px;
-	transform-origin : top;
-	transform        : rotate(45deg);
-	transition       : all 0.3s ease-in-out;
-}
-
-.action_items_bar {
-	position         : absolute;
-	top              : 4.5%;
-	left             : 18%;
-	width            : 380px;
-	height           : 30px;
-	background-color : #e84f3e;
-	border-radius    : 60px;
-	box-shadow       : 0px 5px 20px #f19181;
-	z-index          : 5;
-	transform        : scaleX(0);
-	transition       : all 0.3s ease-in-out;
-}
-
-.FABMenu input:checked ~ .action_items_bar {
-	transform : scaleX(1);
-}
-
-.action_items span {
-	position     : absolute;
-	top          : 25%;
-	width        : 20px;
-	padding-left : 35px;
-	opacity      : 0;
-	transition   : all 0.2s ease-in-out;
-	cursor       : pointer;
-}
-
-.first_item {
-	left : 0%;
-}
-
-.second_item {
-	left : 15%;
-}
-
-.third_item {
-	left : 55%;
-}
-
-.fourth_item {
-	left : 70%;
-}
-
-.FABMenu input:checked ~ .action_items_bar .action_items .first_item {
-	opacity          : 1;
-	transition-delay : 0.45s;
-}
-
-.FABMenu input:checked ~ .action_items_bar .action_items .second_item {
-	opacity          : 1;
-	transition-delay : 0.4s;
-}
-
-.FABMenu input:checked ~ .action_items_bar .action_items .third_item {
-	opacity          : 1;
-	transition-delay : 0.4s;
-}
-
-.FABMenu input:checked ~ .action_items_bar .action_items .fourth_item {
-	opacity          : 1;
-	transition-delay : 0.45s;
 }
 
 
