@@ -423,7 +423,7 @@ export default {
 			if (elem.dataset.position.startsWith("c")) {
 				if (elem.children[0]) {
 					const height = elem.children[0].children[0].getBoundingClientRect().height;
-					elem.style.height = (height + ((elem.childElementCount - 1) * 25)) + 'px';
+					elem.style.height = (height + ((elem.childElementCount - 1) * 45)) + 'px';
 				}
 			}
 		}
@@ -578,15 +578,6 @@ export default {
 		},
 		startDrag(evt, item, index, stack) {
 			this.selectedCards = stack.slice(index).filter(card => parseInt(card.value) <= parseInt(item.value));
-			this.selectedCards.forEach((cardItem, indexItem) => {
-				const cardElement = document.getElementById('card-' + cardItem.id);
-				cardElement.style.left = evt.clientX - (cardElement.children[0].getBoundingClientRect().width / 2) + 'px';
-				cardElement.style.top = evt.clientY - (cardElement.children[0].getBoundingClientRect().height / 2) + indexItem * 45 + 'px';
-				cardElement.style.position = 'fixed';
-				cardElement.style.width = cardElement.children[0].getBoundingClientRect().width + 'px';
-				cardElement.style.height = cardElement.children[0].getBoundingClientRect().height + 'px';
-				cardElement.style.zIndex = 999;
-			});
 			if (!this.selectedCards.find(card => card.flipped === false)) {
 				document.addEventListener("mousemove", this.onDrag);
 				document.addEventListener("mouseup", this.endDrag);
@@ -718,10 +709,8 @@ export default {
 		},
 		moveCard(card, index, clientX, clientY) {
 			const elem = document.getElementById('card-' + card.id);
-			// console.log('moveCard w', elem.getBoundingClientRect().width)
-			// console.log('moveCard h', elem.getBoundingClientRect().height)
-			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
-			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
+			elem.style.top = clientY - (elem.children[0].getBoundingClientRect().height / 2) + index * 45 + 'px';
+			elem.style.left = clientX - (elem.children[0].getBoundingClientRect().width / 2) + 'px';
 			elem.style.position = 'fixed';
 			elem.style.zIndex = 999;
 		},
