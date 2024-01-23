@@ -4,6 +4,26 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 </script>
 
 <template>
+	<div class="navigation">
+		<div class="FABMenu">
+			<input type="checkbox" checked />
+			<div class="hamburger">
+				<div class="dots">
+					<span class="first"></span>
+					<span class="second"></span>
+					<span class="third"></span>
+				</div>
+			</div>
+			<div class="action_items_bar">
+				<div class="action_items">
+					<span class="first_item"><i class="material-icons">favorite</i></span>
+					<span class="second_item"><i class="material-icons">chat</i></span>
+					<span class="third_item"><i class="material-icons">get_app</i></span>
+					<span class="fourth_item"><i class="material-icons">share</i></span>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="gameView">
 		<div class="gameView__playArea" :style="{backgroundImage:`url(${background_image})`}">
 			<div id="loading_overlay" class="loading">
@@ -293,6 +313,7 @@ import config from "../../config";
  * TODO: stacks durch positionen ersetzen
  */
 export default {
+	emits: ["changeView"],
 	data() {
 		return {
 			cardObjects: [],
@@ -311,19 +332,16 @@ export default {
 			method: 'GET',
 			headers: headerObj
 		};
+
 		fetch(config.api.url + '/Session/get', getSession).then(async response => {
 			const isJson = response.headers.get('content-type')?.includes('application/json');
 			const data = isJson && await response.json();
-			if (response.ok) {
+
+			localStorage.SessionID = 0;
+			if (response.status === 200) {
 				localStorage.SessionID = parseInt(data.id);
 			}
-			if (!response.ok) {
-				localStorage.SessionID = 0;
-				const error = (data && data.message) || response.status;
-				return Promise.reject(error);
-			}
-		}).catch(error => {
-			console.error("There was an error!", error);
+
 		}).then(() => {
 			if (parseInt(localStorage.SessionID) === 0) {
 				const postSession = {
@@ -340,63 +358,21 @@ export default {
 				}).catch(error => {
 					console.error("There was an error!", error);
 				}).then(() => {
-					callGameInit(this);
+					this.callGameInit(headerObj);
 				});
 			} else if (parseInt(localStorage.SessionID) !== 0) {
-				callGameInit(this);
+				this.callGameInit(headerObj);
 			}
 		});
-
-		function callGameInit(obj) {
-			const initGame = {
-				method: 'POST',
-				headers: headerObj,
-				body: JSON.stringify({
-					solitaireSessionId: localStorage.SessionID
-				})
-			}
-
-			fetch(config.api.url + '/Game/getCards', initGame).then(async response => {
-				const isJson = response.headers.get('content-type')?.includes('application/json');
-				const data = isJson && await response.json();
-				if (response.ok) {
-					obj.cardObjects = data;
-				}
-
-				// check for error response
-				if (!response.ok) {
-					// get error message from body or default to response status
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
-				}
-			}).then(() => {
-				if (obj.cardObjects.length === 0) {
-					fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
-						const isJson = response.headers.get('content-type')?.includes('application/json');
-						const data = isJson && await response.json();
-						if (response.ok) {
-							obj.cardObjects = data;
-							document.getElementById('loading_overlay').style.opacity = '0';
-						}
-
-						// check for error response
-						if (!response.ok) {
-							// get error message from body or default to response status
-							const error = (data && data.message) || response.status;
-							return Promise.reject(error);
-						}
-					});
-				} else {
-					document.getElementById('loading_overlay').style.opacity = '0';
-				}
-			});
-		}
 	},
 	updated() {
-		for (const elem of document.getElementsByClassName('gameView__playArea__drawDeck__holder')) {
+		const cards = document.getElementsByClassName('gameView__playArea__drawDeck__holder');
+		for (const elem of cards) {
 			if (elem.dataset.position.startsWith("c")) {
-				const height = elem.children[0].children[0].getBoundingClientRect().height;
-				elem.style.height = (height + ((elem.childElementCount - 1) * 25)) + 'px';
+				if (elem.children[0]) {
+					const height = elem.children[0].children[0].getBoundingClientRect().height;
+					elem.style.height = (height + ((elem.childElementCount - 1) * 25)) + 'px';
+				}
 			}
 		}
 	},
@@ -443,6 +419,9 @@ export default {
 		},
 	},
 	methods: {
+		setWindow(viewIndex) {
+			this.$emit('changeView', viewIndex)
+		},
 		goBack() {
 			document.getElementById('loading_overlay').style.opacity = '1';
 			const goBackBody = {
@@ -703,6 +682,51 @@ export default {
 		orderByDrawStackDESC(stack) {
 			return stack.slice().sort((b, a) => parseInt(a.position.split("d")[1]) - parseInt(b.position.split("d")[1]));
 		},
+		callGameInit(headerObj) {
+			const initGame = {
+				method: 'POST',
+				headers: headerObj,
+				body: JSON.stringify({
+					solitaireSessionId: localStorage.SessionID
+				})
+			}
+
+			fetch(config.api.url + '/Game/getCards', initGame).then(async response => {
+				const isJson = response.headers.get('content-type')?.includes('application/json');
+				const data = isJson && await response.json();
+				if (response.ok) {
+					this.cardObjects = data;
+				}
+
+				// check for error response
+				if (!response.ok) {
+					// get error message from body or default to response status
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			}).then(() => {
+				if (this.cardObjects.length === 0) {
+					fetch(config.api.url + '/Game/initialize', initGame).then(async response => {
+						const isJson = response.headers.get('content-type')?.includes('application/json');
+						const data = isJson && await response.json();
+						if (response.ok && data.length > 0) {
+							this.cardObjects = data;
+							this.selfReload();
+							document.getElementById('loading_overlay').style.opacity = '0';
+						}
+
+						// check for error response
+						if (!response.ok) {
+							// get error message from body or default to response status
+							const error = (data && data.message) || response.status;
+							return Promise.reject(error);
+						}
+					}).then();
+				} else {
+					document.getElementById('loading_overlay').style.opacity = '0';
+				}
+			});
+		}
 	},
 	props: {
 		selfReload: {}
@@ -718,5 +742,159 @@ export default {
 	height      : 100%;
 	align-items : center;
 }
+
+.navigation {
+	position : absolute;
+	top      : 0;
+	left     : 0;
+	bottom   : 0;
+	right    : 0;
+	margin   : auto;
+	width    : 100%;
+	height   : 100%;
+}
+
+.FABMenu {
+	position  : absolute;
+	top       : 25px;
+	left      : 50%;
+	transform : translateX(-50%);
+	z-index   : 999;
+	margin    : auto;
+	width     : 600px;
+	height    : 200px;
+}
+
+.FABMenu input {
+	position      : absolute;
+	top           : 0%;
+	left          : 50%;
+	transform     : translateX(-50%);
+	width         : 50px;
+	height        : 50px;
+	z-index       : 20;
+	border-radius : 50px;
+	opacity       : 0;
+	cursor        : pointer;
+}
+
+.hamburger {
+	position         : absolute;
+	top              : 0%;
+	left             : 50%;
+	transform        : translateX(-50%);
+	width            : 50px;
+	height           : 50px;
+	background-color : #e84f3e;
+	border-radius    : 100%;
+	box-shadow       : 0px 5px 20px rgba(0, 0, 0, 0.15);
+	z-index          : 10;
+	cursor           : pointer;
+}
+
+.dots span {
+	position      : absolute;
+	top           : 45%;
+	width         : 7px;
+	height        : 7px;
+	border-radius : 7px;
+	background    : #fff;
+	z-index       : 20;
+	transition    : all 0.3s ease-in-out;
+}
+
+.dots {
+	display         : flex;
+	justify-content : center;
+}
+
+.first {
+	margin-right : 20px;
+}
+
+.third {
+	margin-left : 20px;
+}
+
+.FABMenu input:checked ~ .hamburger .dots .first {
+	top              : 15px;
+	height           : 29px;
+	transform-origin : top;
+	transform        : rotate(-45deg);
+	transition       : all 0.3s ease-in-out;
+}
+
+.FABMenu input:checked ~ .hamburger .dots .third {
+	top              : 15px;
+	height           : 29px;
+	transform-origin : top;
+	transform        : rotate(45deg);
+	transition       : all 0.3s ease-in-out;
+}
+
+.action_items_bar {
+	position         : absolute;
+	top              : 4.5%;
+	left             : 18%;
+	width            : 380px;
+	height           : 30px;
+	background-color : #e84f3e;
+	border-radius    : 60px;
+	box-shadow       : 0px 5px 20px #f19181;
+	z-index          : 5;
+	transform        : scaleX(0);
+	transition       : all 0.3s ease-in-out;
+}
+
+.FABMenu input:checked ~ .action_items_bar {
+	transform : scaleX(1);
+}
+
+.action_items span {
+	position     : absolute;
+	top          : 25%;
+	width        : 20px;
+	padding-left : 35px;
+	opacity      : 0;
+	transition   : all 0.2s ease-in-out;
+	cursor       : pointer;
+}
+
+.first_item {
+	left : 0%;
+}
+
+.second_item {
+	left : 15%;
+}
+
+.third_item {
+	left : 55%;
+}
+
+.fourth_item {
+	left : 70%;
+}
+
+.FABMenu input:checked ~ .action_items_bar .action_items .first_item {
+	opacity          : 1;
+	transition-delay : 0.45s;
+}
+
+.FABMenu input:checked ~ .action_items_bar .action_items .second_item {
+	opacity          : 1;
+	transition-delay : 0.4s;
+}
+
+.FABMenu input:checked ~ .action_items_bar .action_items .third_item {
+	opacity          : 1;
+	transition-delay : 0.4s;
+}
+
+.FABMenu input:checked ~ .action_items_bar .action_items .fourth_item {
+	opacity          : 1;
+	transition-delay : 0.45s;
+}
+
 
 </style>

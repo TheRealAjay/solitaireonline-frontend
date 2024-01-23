@@ -1,88 +1,3 @@
-<script setup>
-import {ref} from 'vue';
-import config from "../../../config";
-
-const errorMessage = ref(null);
-
-const onSubmit = async (e) => {
-	let values = [];
-	for (const eElement of e.target.elements) {
-		if (eElement.name) {
-			values[eElement.name] = eElement.value;
-		}
-	}
-
-	if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/.test(values['password'])) {
-		document.getElementById('password__error').innerText = 'Passwort muss mind. 6 Zeichen Lang sein und mind. einen Großbuchstaben und Sonderzeichen beinhalten';
-		return;
-	}
-
-	if (values['password'] !== values['repeat_password']) {
-		document.getElementById('repeat_password__error').innerText = 'Passwörter müssen übereinstimmen';
-		return;
-	}
-
-	document.getElementById('login__box__popup').style.display = 'flex';
-
-	const requestOptions = {
-		method: 'POST',
-		headers: {
-			"Content-Type": "application/json",
-			"Accept": "*/*",
-		},
-		body: JSON.stringify({
-			username: values['username'],
-			password: values['password'],
-			passwordConfirm: values['repeat_password']
-		})
-	};
-
-	fetch(config.api.url + '/Account/register', requestOptions)
-		.then(async response => {
-			const isJson = response.headers.get('content-type')?.includes('application/json');
-			const data = isJson && await response.json();
-
-			if (response.ok) {
-				document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-success');
-				document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'block';
-				document.getElementById('login__box__popup__holder__text').innerText = 'Registrierung war erfolgreich, Sie werden in Kürze weitergeleitet.';
-				localStorage.clear();
-				setTimeout(() => {
-					window.location.replace("/");
-				}, 2500)
-			}
-
-			// check for error response
-			if (!response.ok) {
-				localStorage.clear();
-				// get error message from body or default to response status
-				const error = (data && data.message) || response.status;
-
-				document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-fail');
-				document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'block';
-				if (response.status === 409) {
-					document.getElementById('login__box__popup__holder__text').innerText = 'Benutzername ist bereits vergeben.';
-				} else {
-					document.getElementById('login__box__popup__holder__text').innerText = 'Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.';
-				}
-				setTimeout(() => {
-
-					document.getElementById('login__box__popup__holder__icon__circle-loader').classList.remove('load-complete', 'load-success', 'load-fail');
-					document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'none';
-					document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'none';
-					document.getElementById('login__box__popup').style.display = 'none';
-				}, 2500)
-				return Promise.reject(error);
-			}
-		})
-		.catch(error => {
-			errorMessage.value = error;
-			console.error("There was an error!", error);
-		});
-}
-
-</script>
-
 <template>
 	<form @submit.prevent="onSubmit" id="registerform" class="login__box__form" method="post">
 		<label for="username" hidden="hidden">Benutzername</label>
@@ -121,10 +36,15 @@ const onSubmit = async (e) => {
 </template>
 
 <script>
-import {debounce} from "../../../config";
+import config, {debounce} from "../../../config";
+import navigatorConfig from "../../../navigator.json";
+import {ref} from 'vue';
+
+const errorMessage = ref(null);
 
 export default {
 	name: "RegisterForm",
+	emits: ["changeView"],
 	data() {
 		return {
 			debounceCheckValid: null,
@@ -137,6 +57,9 @@ export default {
 		this.debounceCheckDouble = debounce((e) => this.checkPasswordSame(e), 800);
 	},
 	methods: {
+		setWindow(viewIndex) {
+			this.$emit('changeView', viewIndex)
+		},
 		checkPasswordValidation(event) {
 			let password = event.target.form.elements['password'].value;
 			let regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/;
@@ -161,6 +84,81 @@ export default {
 		},
 		onRepeatUp(e) {
 			this.debounceCheckDouble(e);
+		},
+		async onSubmit(e) {
+			let values = [];
+			for (const eElement of e.target.elements) {
+				if (eElement.name) {
+					values[eElement.name] = eElement.value;
+				}
+			}
+
+			if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/.test(values['password'])) {
+				document.getElementById('password__error').innerText = 'Passwort muss mind. 6 Zeichen Lang sein und mind. einen Großbuchstaben und Sonderzeichen beinhalten';
+				return;
+			}
+
+			if (values['password'] !== values['repeat_password']) {
+				document.getElementById('repeat_password__error').innerText = 'Passwörter müssen übereinstimmen';
+				return;
+			}
+
+			document.getElementById('login__box__popup').style.display = 'flex';
+
+			const requestOptions = {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "*/*",
+				},
+				body: JSON.stringify({
+					username: values['username'],
+					password: values['password'],
+					passwordConfirm: values['repeat_password']
+				})
+			};
+
+			fetch(config.api.url + '/Account/register', requestOptions)
+				.then(async response => {
+					const isJson = response.headers.get('content-type')?.includes('application/json');
+					const data = isJson && await response.json();
+
+					if (response.ok) {
+						document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-success');
+						document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'block';
+						document.getElementById('login__box__popup__holder__text').innerText = 'Registrierung war erfolgreich, Sie werden in Kürze weitergeleitet.';
+						localStorage.clear();
+						setTimeout(() => {
+							this.setWindow(navigatorConfig.view.Login)
+						}, 2500)
+					}
+
+					// check for error response
+					if (!response.ok) {
+						localStorage.clear();
+						// get error message from body or default to response status
+						const error = (data && data.message) || response.status;
+
+						document.getElementById('login__box__popup__holder__icon__circle-loader').classList.add('load-complete', 'load-fail');
+						document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'block';
+						if (response.status === 409) {
+							document.getElementById('login__box__popup__holder__text').innerText = 'Benutzername ist bereits vergeben.';
+						} else {
+							document.getElementById('login__box__popup__holder__text').innerText = 'Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.';
+						}
+						setTimeout(() => {
+							document.getElementById('login__box__popup__holder__icon__circle-loader').classList.remove('load-complete', 'load-success', 'load-fail');
+							document.getElementById('login__box__popup__holder__icon__checkmark').style.display = 'none';
+							document.getElementById('login__box__popup__holder__icon__crossmark').style.display = 'none';
+							document.getElementById('login__box__popup').style.display = 'none';
+						}, 2500)
+						return Promise.reject(error);
+					}
+				})
+				.catch(error => {
+					errorMessage.value = error;
+					console.error("There was an error!", error);
+				});
 		}
 	}
 }

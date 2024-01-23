@@ -1,0 +1,8 @@
+{
+  "view": {
+    "Login": 0,
+    "Register": 1,
+    "Game": 2,
+    "Score": 3
+  }
+}

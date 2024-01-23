@@ -12,5 +12,18 @@ const updateComponent = () => {
 </script>
 
 <template>
-	<Board :key="renderKey" :self-reload="updateComponent" />
+	<Board @change-view="(newView) => this.setWindow(newView)" :key="renderKey" :self-reload="updateComponent" />
 </template>
+
+<script>
+import config from "../../navigator.json";
+
+export default {
+	emits: ["changeView"],
+	methods: {
+		setWindow(viewIndex) {
+			this.$emit('changeView', viewIndex)
+		},
+	}
+}
+</script>
