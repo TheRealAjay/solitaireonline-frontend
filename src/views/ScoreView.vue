@@ -153,7 +153,7 @@ export default {
         };
     },
 
-    name: "App",
+    name: "ScoreView",
     components: {
         Bar,
     },

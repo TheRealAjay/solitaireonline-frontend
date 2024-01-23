@@ -69,7 +69,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackTwo"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -88,7 +88,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackThree"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -107,7 +107,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackFour"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -126,7 +126,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackFive"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -145,7 +145,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackSix"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -164,7 +164,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackSeven"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -183,7 +183,7 @@ import PlayingCard from "@/components/Card/PlayingCard.vue";
 					 v-for="(item, index) in stackEight"
 					 :id="'card-' + item.id"
 					 :key="item.id"
-					 :style="{top: index * 25 + 'px'}"
+					 :style="{top: index * 45 + 'px'}"
 					 :data-card-index="index"
 					 :data-card-pos="item.position"
 					 @drag.prevent
@@ -390,6 +390,14 @@ export default {
 					document.getElementById('loading_overlay').style.opacity = '0';
 				}
 			});
+		}
+	},
+	updated() {
+		for (const elem of document.getElementsByClassName('gameView__playArea__drawDeck__holder')) {
+			if (elem.dataset.position.startsWith("c")) {
+				const height = elem.children[0].children[0].getBoundingClientRect().height;
+				elem.style.height = (height + ((elem.childElementCount - 1) * 25)) + 'px';
+			}
 		}
 	},
 	name: "GameView",
@@ -672,7 +680,7 @@ export default {
 			const elem = document.getElementById('card-' + card.id);
 			elem.style.position = 'fixed';
 			elem.style.left = clientX - (elem.getBoundingClientRect().width / 2) + 'px';
-			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 25 + 'px';
+			elem.style.top = clientY - (elem.getBoundingClientRect().height / 2) + index * 45 + 'px';
 			elem.style.width = 90 + 'px';
 			elem.style.height = 120 + 'px';
 			elem.style.zIndex = 999;
@@ -681,7 +689,7 @@ export default {
 			const elem = document.getElementById('card-' + card.id);
 			elem.style.position = null;
 			elem.style.left = null;
-			elem.style.top = index * 25 + 'px';
+			elem.style.top = index * 45 + 'px';
 			elem.style.width = null;
 			elem.style.height = null;
 			elem.style.zIndex = null;

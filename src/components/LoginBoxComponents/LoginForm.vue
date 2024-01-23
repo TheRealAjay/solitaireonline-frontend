@@ -38,7 +38,7 @@ const onSubmit = async (e) => {
 				localStorage.BearerToken = data["token"];
 				localStorage.ProfilePicture = data['base64String'];
 				localStorage.UserName = data['username'];
-				window.location.replace("/spiel");
+				window.location.replace("#/spiel");
 			}
 
 			// check for error response
