@@ -1,6 +1,6 @@
 FROM node:lts-alpine as build
 RUN npm install -g http-server
-WORKDIR /var/www/html/vue3-docker
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .

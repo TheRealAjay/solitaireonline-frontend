@@ -365,7 +365,7 @@ import config from "../../config";
  * TODO: stacks durch positionen ersetzen
  */
 export default {
-	emits: ["changeView"],
+	emits: ["changePage"],
 	data() {
 		return {
 			cardObjects: [],
@@ -472,7 +472,7 @@ export default {
 	},
 	methods: {
 		setWindow(viewIndex) {
-			this.$emit('changeView', viewIndex)
+			this.$emit('changePage', viewIndex)
 		},
 		goBack() {
 			document.getElementById('loading_overlay').style.opacity = '1';
@@ -651,16 +651,10 @@ export default {
 			fetch(config.api.url + reqURL, moveCard).then(async response => {
 				const isJson = response.headers.get('content-type')?.includes('application/json');
 				const data = isJson && await response.json();
-
 				if (response.ok) {
 					if (data === true) {
 						let firstCardPos = this.selectedCards[0].position.split("r");
 						let beforeCardPos = firstCardPos[0] + "r" + (parseInt(firstCardPos[1]) - 1);
-						let flipReqBody = {
-							position: beforeCardPos,
-							manualFlip: false,
-							solitaireSessionId: localStorage.SessionID
-						}
 						this.selectedCards.forEach((card, index) => {
 							card.position = this.targetStack + "r" + (targetStackNode.childElementCount + (index + 1));
 						});
@@ -668,28 +662,35 @@ export default {
 							const updatedCard = this.selectedCards.find((c) => c.id === card.id);
 							return updatedCard ? updatedCard : card;
 						});
-						const flipCardReq = {
-							method: 'POST',
-							headers: {
-								"Content-Type": "application/json",
-								"Accept": "*/*",
-								"Authorization": `Bearer ${localStorage.BearerToken}`,
-							},
-							body: JSON.stringify(flipReqBody)
-						}
-						fetch(config.api.url + "/Game/flip", flipCardReq).then(async response => {
-							const isJson = response.headers.get('content-type')?.includes('application/json');
-							const data = isJson && await response.json();
-							if (data) {
-								let flipCard = this.cardObjects.find(c => c.position === beforeCardPos);
-								this.cardObjects = this.cardObjects.map((card) => {
-									if (card.id === flipCard.id) {
-										card.flipped = true;
-									}
-									return card;
-								});
+						if ((parseInt(firstCardPos[1]) - 1) > 0) {
+							let flipReqBody = {
+								position: beforeCardPos,
+								manualFlip: false,
+								solitaireSessionId: localStorage.SessionID
 							}
-						});
+							const flipCardReq = {
+								method: 'POST',
+								headers: {
+									"Content-Type": "application/json",
+									"Accept": "*/*",
+									"Authorization": `Bearer ${localStorage.BearerToken}`,
+								},
+								body: JSON.stringify(flipReqBody)
+							}
+							fetch(config.api.url + "/Game/flip", flipCardReq).then(async response => {
+								const isJson = response.headers.get('content-type')?.includes('application/json');
+								const data = isJson && await response.json();
+								if (data) {
+									let flipCard = this.cardObjects.find(c => c.position === beforeCardPos);
+									this.cardObjects = this.cardObjects.map((card) => {
+										if (card.id === flipCard.id) {
+											card.flipped = true;
+										}
+										return card;
+									});
+								}
+							});
+						}
 					} else {
 						this.selectedCards.forEach((card) => {
 							this.resetCardPos(card, parseInt(card.position.split("r")[1]) - 1)

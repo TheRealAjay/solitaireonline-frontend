@@ -75,7 +75,6 @@ import {
 	CategoryScale,
 	BarElement,
 } from "chart.js";
-import {Scatter} from "vue-chartjs";
 import {Bar} from "vue-chartjs";
 
 ChartJS.register(
@@ -169,6 +168,13 @@ export default {
 			isLoading: true,
 		};
 	},
+	async mounted() {
+		this.isLoading = true;
+		this.player = localStorage.UserName;
+		this.scores = await this.getScores();
+		this.parseScore();
+		this.isLoading = false;
+	},
 	name: "ScoreView",
 	components: {
 		Bar,
@@ -186,7 +192,7 @@ export default {
 					token: token,
 				},
 			});
-			return await response.json();
+			return response.json();
 		},
 		parseScore() {
 			if (this.scores != null && this.scores.length > 0) {
@@ -209,14 +215,6 @@ export default {
 		setWindow(viewIndex) {
 			this.$emit('changeView', viewIndex)
 		},
-	},
-
-	async created() {
-		this.isLoading = true;
-		this.player = localStorage.UserName;
-		this.scores = await this.getScores();
-		this.parseScore();
-		this.isLoading = false;
 	},
 };
 </script>

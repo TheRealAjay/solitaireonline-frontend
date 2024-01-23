@@ -12,7 +12,7 @@ const updateComponent = () => {
 </script>
 
 <template>
-	<Board @change-view="(newView) => this.setWindow(newView)" :key="renderKey" :self-reload="updateComponent" />
+	<Board @change-page="(newView) => setWindow(newView)" :key="renderKey" :self-reload="updateComponent" />
 </template>
 
 <script>

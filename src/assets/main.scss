@@ -473,6 +473,7 @@ a, .green {
 		position           : absolute;
 		width              : 6vw;
 		max-width          : 250px;
+		min-height         : 11vh;
 
 		@media screen and (max-width : 1350px) {
 		  width     : 5vw;
