@@ -82,7 +82,7 @@
 	width    : 46px;
 }
 
-.menu {
+.menu, .logout {
 	-webkit-tap-highlight-color : transparent;
 	background                  : #fff;
 	border-radius               : 50%;
@@ -96,6 +96,14 @@
 	z-index                     : 998;
 }
 
+.logout {
+	right  : -50px;
+	height : 100px;
+	top    : -50px;
+	width  : 100px;
+	left   : unset;
+}
+
 .hamburger {
 	cursor   : pointer;
 	height   : 46px;
@@ -104,6 +112,7 @@
 	top      : 58%;
 	width    : 46px;
 }
+
 .goBack {
 	cursor   : pointer;
 	height   : 46px;
